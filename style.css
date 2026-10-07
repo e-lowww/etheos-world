@@ -5,7 +5,7 @@
 /* ---------- 1. VARIABLES ---------- */
 :root {
   /* Colores base */
-  --color-fondo: #FFFFFF;          /* blanco puro */
+  --color-fondo: #FFFFFF;
   --color-fondo-translucido: rgba(255, 255, 255, 0.94);
   --color-blanco: #FFFFFF;
   --color-rosa: #F7D6DC;           /* rosita pastel */
@@ -25,6 +25,7 @@
   --color-azul: #CFE6F5;           /* azul clarito */
   --color-azul-hover: #B4D7EE;
   --color-verde-ok: #CDEBD3;
+  --color-error: #B3261E;          /* mensajes de error */
 
   /* Tipografía */
   --fuente-serif: 'Playfair Display', Georgia, serif;
@@ -44,7 +45,7 @@
   --espacio-lg: 4rem;
   --espacio-xl: 6rem;
 
-  /* efectos */
+  /* Efectos */
   --sombra-suave: 0 10px 30px rgba(107, 30, 46, 0.08);
   --sombra-media: 0 20px 50px rgba(107, 30, 46, 0.15);
   --transicion: all 0.3s ease;
@@ -70,6 +71,7 @@ body {
   background-color: var(--color-fondo);
   color: var(--color-texto);
   line-height: 1.7;
+  overflow-x: hidden; /* evita scroll horizontal por imágenes anchas */
 }
 
 img {
@@ -84,6 +86,17 @@ a {
 
 ul {
   list-style: none;
+}
+
+/* Foco visible al navegar con teclado */
+:focus-visible {
+  outline: 3px solid var(--color-vino);
+  outline-offset: 3px;
+}
+
+/* El atributo hidden siempre debe ocultar, aunque la clase defina display */
+[hidden] {
+  display: none !important;
 }
 
 .sr-only {
@@ -110,6 +123,11 @@ ul {
   transition: var(--transicion);
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .btn--ancho { width: 100%; }
 
 .btn--oscuro {
@@ -118,13 +136,22 @@ ul {
 }
 .btn--oscuro:hover { background-color: var(--color-vino-oscuro); }
 
+.btn--secundario {
+  background-color: transparent;
+  color: var(--color-vino);
+  border: 2px solid var(--color-vino);
+}
+.btn--secundario:hover {
+  background-color: var(--color-vino);
+  color: var(--color-fondo);
+}
+
 .btn--admin {
   background-color: var(--color-chocolate);
   color: var(--color-fondo);
   padding: 0.6rem 1.3rem;
   font-size: 0.85rem;
 }
-
 .btn--admin:hover { background-color: var(--color-vino); }
 
 .btn--plano {
@@ -133,7 +160,6 @@ ul {
   width: 100%;
   margin-top: auto;
 }
-
 .btn--plano:hover {
   background-color: var(--color-chocolate);
   color: var(--color-fondo);
@@ -144,16 +170,13 @@ ul {
   color: var(--color-chocolate);
   margin-bottom: var(--espacio-md);
 }
-
 .btn--volver:hover { background-color: var(--color-azul-hover); }
 
 .btn--vino {
   background-color: var(--color-chocolate);
   color: var(--color-fondo);
   padding: 1rem 2rem;
-
 }
-
 .btn--vino:hover { background-color: var(--color-vino); }
 
 .btn--amarillo {
@@ -162,7 +185,6 @@ ul {
   font-weight: 600;
   white-space: nowrap;
 }
-
 .btn--amarillo:hover { background-color: var(--color-amarillo-hover); }
 
 .btn--aprobar {
@@ -182,7 +204,6 @@ ul {
 .btn--rechazar:hover { background-color: var(--color-vino); color: var(--color-fondo); }
 
 /* ---------- 4. HEADER ---------- */
-
 .header {
   position: fixed;
   top: 0;
@@ -191,7 +212,7 @@ ul {
   height: var(--altura-header);
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 var(--espacio-lg);
   background-color: var(--color-fondo-translucido);
   backdrop-filter: blur(12px);
@@ -201,9 +222,9 @@ ul {
 
 .logo {
   font-family: var(--fuente-serif);
-  font-size: 1.8rem;
-  font-weight: 1000;
-  letter-spacing: 0.45em;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
   color: var(--color-vino);
 }
 
@@ -214,7 +235,6 @@ ul {
 }
 
 .nav__enlace {
-
   font-size: 0.95rem;
   color: var(--color-texto);
   position: relative;
@@ -236,8 +256,22 @@ ul {
 .nav__enlace:hover { color: var(--color-vino); }
 .nav__enlace:hover::after { width: 100%; }
 
-/* ---------- 5. MODAL LOGIN ---------- */
+/* Botón hamburguesa: oculto en escritorio */
+.nav__toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-rosa-borde);
+  border-radius: 50%;
+  background-color: var(--color-rosa-claro);
+  color: var(--color-vino);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
 
+/* ---------- 5. MODAL LOGIN ---------- */
 .modal {
   position: fixed;
   inset: 0;
@@ -294,7 +328,7 @@ ul {
 .modal__titulo {
   font-family: var(--fuente-serif);
   color: var(--color-vino);
-  font-size: 1.6rem
+  font-size: 1.6rem;
 }
 
 .modal__subtitulo {
@@ -321,13 +355,14 @@ ul {
   color: var(--color-vino);
 }
 
+.modal__mensaje--error { color: var(--color-error); }
+
 @keyframes aparecer {
   from { opacity: 0; transform: translateY(20px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ---------- 6. CAMPOS DE FORMULARIO ---------- */
-
 .campo {
   display: flex;
   flex-direction: column;
@@ -375,7 +410,6 @@ ul {
 }
 
 /* ---------- 7. SECCIONES GENERALES ---------- */
-
 .seccion__cabecera {
   text-align: center;
   max-width: 680px;
@@ -408,11 +442,10 @@ ul {
 }
 
 /* ---------- 8. HERO ---------- */
-
 .hero {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.15fr 0.85fr; /* más espacio para la imagen */
   align-items: center;
   gap: var(--espacio-lg);
   padding: calc(var(--altura-header) + var(--espacio-md))
@@ -424,6 +457,32 @@ ul {
     radial-gradient(circle at 92% 85%, var(--color-azul) 0, transparent 34%),
     radial-gradient(circle at 80% 10%, var(--color-amarillo) 0, transparent 18%),
     var(--color-blanco);
+}
+
+/* --- Imagen --- */
+.hero__figura {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  width: 100%;
+  max-width: 760px;
+  margin: 0;
+}
+
+.hero__imagen {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;           /* el blanco del JPG desaparece */
+  filter: drop-shadow(0 25px 35px rgba(107, 30, 46, 0.25));
+  /* La animación va en la imagen y no en la figura: si va en el
+     contenedor, el modo de mezcla deja de funcionar. */
+  animation: flotar 6s ease-in-out infinite;
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
 }
 
 /* --- Texto --- */
@@ -458,22 +517,11 @@ ul {
   margin-bottom: var(--espacio-md);
 }
 
-/* --- Botones --- */
 .hero__acciones {
   display: flex;
   flex-wrap: wrap;
   gap: var(--espacio-sm);
   margin-bottom: var(--espacio-md);
-}
-
-.btn--secundario {
-  background-color: transparent;
-  color: var(--color-vino);
-  border: 2px solid var(--color-vino);
-}
-.btn--secundario:hover {
-  background-color: var(--color-vino);
-  color: var(--color-fondo);
 }
 
 /* --- Datos cortos --- */
@@ -499,58 +547,7 @@ ul {
   color: var(--color-vino);
 }
 
-/* --- Imagen --- */
-.hero__figura {
-  position: relative;
-  grid-column: 1;
-  grid-row: 1;
-  justify-self: center;
-  width: 100%;
-  max-width: 760px;
-  margin: 0;
-}
-
-.hero__marco {
-  padding: 1.5rem;
-  background-color: var(--color-rosa);
-  border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
-  box-shadow: var(--sombra-media);
-  animation: flotar 6s ease-in-out infinite;
-   grid-template-columns: 1.15fr 0.85fr; /* más espacio para la imagen */
-}
-
-.hero__imagen {
-   width: 110%;
-  height: auto;
-  max-width: none;
-  object-fit: contain;
-  border-radius: 0;
-  background: none;
-  mix-blend-mode: multiply;           /* el blanco desaparece */
-  filter: drop-shadow(0 25px 35px rgba(107, 30, 46, 0.25));
-  animation: flotar 6s ease-in-out infinite;
-}
-
-.hero__insignia {
-  position: absolute;
-  bottom: 8%;
-  right: -2%;
-  padding: 0.6rem 1.2rem;
-  background-color: var(--color-amarillo);
-  color: var(--color-chocolate);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: var(--radio-pill);
-  box-shadow: var(--sombra-suave);
-}
-
-@keyframes flotar {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-10px); }
-}
-
 /* ---------- 9. CATÁLOGO ---------- */
-
 .catalogo {
   padding: var(--espacio-xl) var(--espacio-lg);
 }
@@ -619,36 +616,17 @@ ul {
   padding: var(--espacio-lg) var(--espacio-md);
   border-radius: var(--radio-xl);
   margin-bottom: var(--espacio-md);
+  background-color: ghostwhite;
   isolation: isolate;
 }
 
-.vista__cabecera::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background-image: var(--fondo);
-  background-size: cover;
-  background-position: center;
-  filter: blur(6px);
-  z-index: -2;
-}
-
+/* Velo degradado rosa sobre el fondo de la cabecera */
 .vista__cabecera::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg, rgba(252, 235, 238, 0.95) 0%, rgba(247, 214, 220, 0.85) 60%, rgba(255, 255, 255, 0.75) 100%);
   z-index: -1;
-}
-
-.vista__duracion {
-  display: inline-block;
-  padding: 0.35rem 1rem;
-  border-radius: var(--radio-pill);
-  background-color: var(--color-amarillo);
-  color: var(--color-chocolate);
-  font-size: 0.8rem;
-  font-weight: 600;
 }
 
 .vista__titulo {
@@ -682,7 +660,6 @@ ul {
 }
 
 .recurso:hover {
-  background-color: var(--color-rosa-claro);
   transform: translateX(4px);
   box-shadow: var(--sombra-suave);
 }
@@ -717,9 +694,7 @@ ul {
   font-size: 0.85rem;
 }
 
-
 /* ---------- 11. CONTACTO ---------- */
-
 .contacto {
   padding: var(--espacio-xl) var(--espacio-lg);
   background-color: var(--color-rosa-claro);
@@ -752,14 +727,31 @@ ul {
   grid-column: 1 / -1;
 }
 
+/* El campo del motivo (5.º) y el botón ocupan todo el ancho */
 .formulario__fieldset .campo:nth-of-type(5),
-.formulario__fieldset > .btn {
+.formulario__fieldset > .btn,
+.formulario__estado {
   grid-column: 1 / -1;
 }
+
+.formulario__estado {
+  min-height: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+  color: var(--color-vino);
+}
+
+.formulario__estado--error { color: var(--color-error); }
 
 /* ---------- 12. PANEL ADMIN ---------- */
 .panel {
   padding: var(--espacio-xl) var(--espacio-lg);
+}
+
+.panel__salir {
+  margin-top: var(--espacio-md);
+  padding: 0.6rem 1.3rem;
+  font-size: 0.85rem;
 }
 
 .panel__tabla-contenedor {
@@ -788,10 +780,21 @@ ul {
   padding: 1rem;
   background-color: var(--color-fondo);
   vertical-align: middle;
+  transition: var(--transicion);
 }
 
 .panel__tabla td:first-child { border-radius: var(--radio-md) 0 0 var(--radio-md); }
 .panel__tabla td:last-child  { border-radius: 0 var(--radio-md) var(--radio-md) 0; }
+
+/* Estados de una fila al aprobar o rechazar */
+.fila--aprobada td { background-color: var(--color-verde-ok); }
+.fila--saliendo td { opacity: 0; }
+
+.panel__vacio {
+  padding: var(--espacio-md);
+  text-align: center;
+  color: var(--color-marron-suave);
+}
 
 .panel__link {
   color: var(--color-vino);
@@ -813,8 +816,17 @@ ul {
   font-size: 0.8rem;
 }
 
-/* ---------- 13. GUARDIÁN IA ---------- */
+.estado {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radio-pill);
+  background-color: var(--color-blanco);
+  color: var(--color-chocolate);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
+/* ---------- 13. GUARDIÁN IA ---------- */
 .guardian {
   padding: var(--espacio-xl) var(--espacio-lg);
   background:
@@ -823,6 +835,7 @@ ul {
     radial-gradient(circle at 20% 15%, var(--color-amarillo) 0, transparent 16%),
     var(--color-blanco);
 }
+
 .guardian__grid {
   max-width: 1200px;
   margin: 0 auto;
@@ -831,31 +844,20 @@ ul {
   align-items: center;
   gap: var(--espacio-lg);
 }
+
 .guardian__figura {
-  position: relative;
   margin: 0;
   text-align: center;
 }
+
 .guardian__robot {
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-  /* mix-blend-mode: multiply;  <- descomenta solo si el robot se ve con fondo blanco */
   filter: drop-shadow(0 25px 35px rgba(107, 30, 46, 0.25));
   animation: flotar 6s ease-in-out infinite;
 }
-.guardian__insignia {
-  position: absolute;
-  bottom: 6%;
-  right: 8%;
-  padding: 0.6rem 1.2rem;
-  background-color: var(--color-amarillo);
-  color: var(--color-chocolate);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: var(--radio-pill);
-  box-shadow: var(--sombra-suave);
-}
+
 .chat {
   max-width: 760px;
   margin: 0 auto;
@@ -895,14 +897,6 @@ ul {
   border-bottom-right-radius: 6px;
 }
 
-.chat__autor {
-  display: block;
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: var(--color-vino);
-  margin-bottom: 0.2rem;
-}
-
 .chat__form {
   display: flex;
   gap: var(--espacio-xs);
@@ -916,44 +910,124 @@ ul {
 
 /* ---------- 14. FOOTER ---------- */
 .footer {
-  text-align: center;
-  padding: var(--espacio-lg) var(--espacio-md);
+  padding: var(--espacio-lg) var(--espacio-lg) var(--espacio-md);
   background-color: var(--color-chocolate);
   color: var(--color-rosa);
 }
 
+/* Dos columnas del mismo ancho, centradas verticalmente entre sí */
+.footer__contenido {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--espacio-lg);
+  padding-bottom: var(--espacio-md);
+}
+
+/* --- Izquierda: contacto --- */
+.footer__contacto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  text-align: left;
+  font-style: normal; /* <address> viene en cursiva por defecto */
+}
+
+.footer__etiqueta {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-amarillo);
+}
+
+.footer__nombre {
+  font-weight: 600;
+  color: var(--color-fondo);
+}
+
+.footer__enlace {
+  font-size: 0.95rem;
+  color: var(--color-rosa);
+  transition: var(--transicion);
+}
+
+.footer__enlace:hover {
+  color: var(--color-amarillo);
+}
+
+/* --- Derecha: marca --- */
+.footer__marca {
+  justify-self: end;          
+  width: 100%;
+  max-width: 340px;           
+  display: flex;
+  flex-direction: column;
+  align-items: center;       
+  gap: 0.3rem;
+  text-align: center;
+}
+
 .footer__logo {
   font-family: var(--fuente-serif);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 900;
   letter-spacing: 0.25em;
   color: var(--color-fondo);
 }
-
 .footer__texto {
   font-family: var(--fuente-serif);
   font-style: italic;
-  margin: var(--espacio-xs) 0;
 }
 
+/* --- Derechos: abajo y centrados --- */
 .footer__copy {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: var(--espacio-md);
+  border-top: 1px solid rgba(247, 214, 220, 0.25);
+  text-align: center;
   font-size: 0.8rem;
   opacity: 0.7;
 }
 
-
 /* ---------- 15. RESPONSIVE ---------- */
-
 @media (max-width: 860px) {
   .header {
     padding: 0 var(--espacio-md);
   }
+
+  /* Menú hamburguesa: la lista se vuelve un desplegable bajo el header */
+  .nav__toggle {
+    display: inline-flex;
+  }
   .nav__lista {
-    gap: var(--espacio-sm);
+    display: none;
+    position: absolute;
+    top: var(--altura-header);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: var(--espacio-sm) var(--espacio-md) var(--espacio-md);
+    background-color: var(--color-blanco);
+    border-bottom: 1px solid var(--color-rosa);
+    box-shadow: var(--sombra-suave);
+  }
+  .nav__lista.abierto {
+    display: flex;
   }
   .nav__enlace {
-    display: none;
+    display: block;
+    padding: 0.7rem 0;
   }
+  .nav__lista .btn--admin {
+    margin-top: var(--espacio-xs);
+  }
+
   .hero {
     grid-template-columns: 1fr;
     padding-left: var(--espacio-md);
@@ -969,7 +1043,13 @@ ul {
     grid-column: 1;
     grid-row: 2;
     max-width: 100%;
+    text-align: center;
   }
+  .hero__acciones,
+  .hero__datos {
+    justify-content: center;
+  }
+
   .catalogo,
   .contacto,
   .panel,
@@ -980,18 +1060,18 @@ ul {
   .catalogo__grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .vista__recursos {
     grid-template-columns: 1fr;
   }
-
 }
+
 @media (max-width: 768px) {
   .formulario__fieldset {
     grid-template-columns: 1fr;
   }
   .formulario__fieldset .campo:nth-of-type(5),
-  .formulario__fieldset > .btn {
+  .formulario__fieldset > .btn,
+  .formulario__estado {
     grid-column: 1;
   }
   .guardian__grid {
@@ -1000,6 +1080,24 @@ ul {
   .guardian__figura {
     order: -1;
   }
+    /* Footer: en celular las dos columnas se apilan y se centran */
+  .footer {
+    padding-left: var(--espacio-md);
+    padding-right: var(--espacio-md);
+  }
+  .footer__contenido {
+    grid-template-columns: 1fr;
+    gap: var(--espacio-md);
+    text-align: center;
+  }
+  .footer__contacto,
+  .footer__marca {
+    align-items: center;
+    text-align: center;
+  }
+  .footer__marca {
+    order: -1; /* en celular el logo va arriba y el contacto abajo */
+  }
 }
 
 @media (max-width: 520px) {
@@ -1007,10 +1105,14 @@ ul {
   .chat__form { flex-direction: column; }
   .chat__mensaje { max-width: 100%; }
 }
-  .hero__acciones,
-  .hero__datos {
-    justify-content: center;
+
+/* Respeta a quienes desactivan las animaciones en su dispositivo */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
-  .hero__texto {
-    text-align: center;
-  }
+}

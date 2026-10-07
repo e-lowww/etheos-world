@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -15,8 +15,10 @@
 <body>
   <!-- ================= 1. BARRA DE NAVEGACIÓN ================= -->
   <header class="header">
+    <a href="#inicio" class="logo">ETHEOS</a>
     <nav class="nav" aria-label="Navegación principal">
-      <ul class="nav__lista">
+      <button type="button" class="nav__toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-lista">☰</button>
+      <ul class="nav__lista" id="nav-lista">
         <li><a href="#inicio" class="nav__enlace">Inicio</a></li>
         <li><a href="#catalogo" class="nav__enlace">Catálogo</a></li>
         <li><a href="#contacto" class="nav__enlace">Contacto</a></li>
@@ -25,6 +27,7 @@
       </ul>
     </nav>
   </header>
+
   <!-- ================= 2. MODAL DE LOGIN ================= -->
   <div id="login" class="modal" role="dialog" aria-labelledby="login-titulo" aria-modal="true">
     <a href="#inicio" class="modal__fondo" aria-label="Cerrar ventana"></a>
@@ -36,481 +39,372 @@
 
       <form class="modal__form" id="form-login">
         <label for="login-usuario" class="campo__label">Usuario</label>
-        <input type="text" id="login-usuario" name="usuario" class="campo__input" placeholder="Tu usuario" required>
+        <input type="text" id="login-usuario" name="usuario" class="campo__input" placeholder="Tu usuario" autocomplete="username" required>
         <label for="login-clave" class="campo__label">Contraseña</label>
-        <input type="password" id="login-clave" name="clave" class="campo__input" placeholder="••••••••" required>
+        <input type="password" id="login-clave" name="clave" class="campo__input" placeholder="••••••••" autocomplete="current-password" required>
         <button type="submit" class="btn btn--oscuro btn--ancho">Iniciar Sesión</button>
-        <p class="modal__mensaje" id="login-mensaje" aria-live="polite"></p>
+        <p class="modal__mensaje" id="login-mensaje" role="alert"></p>
       </form>
     </div>
   </div>
 
   <main>
-  <!-- ================= 3. HOME ================= -->
-<section id="inicio" class="hero">
-  <figure class="hero__figura">
-    <img
-      src="c:\Users\USUARIO\Downloads\descarga (1).jfif"
-      alt="Ilustración de un gato "
-      class="hero__imagen" >
-  </figure>
-  <div class="hero__texto">
-    <p class="seccion__etiqueta">Aprende con calma</p>
-    <h2 class="hero__titulo">ETHEOS</h2>
-    <p class="hero__lema">El carácter divino del conocimiento a través de tus pasiones</p>
-    <p class="hero__parrafo">
-      Vivimos rodeados de pantallas que compiten por cada segundo de nuestra atención. Las redes sociales fragmentan la mente con estímulos infinitos y vacíos.
-      Etheos nace como un refugio: un espacio sereno donde cada visita es un módulo breve de aprendizaje concentrado e individual, guiado por aquello que de verdad te apasiona. Aquí no hay notificaciones ni desplazamientos sin fin, solo tú, tu curiosidad y recursos cuidadosamente seleccionados para que cada minuto te deje algo valioso.
-    </p>
-    <div class="hero__acciones">
-      <a href="#catalogo" class="btn btn--oscuro">Explorar el catálogo</a>
-      <a href="#contacto" class="btn btn--secundario">Sugerir un recurso</a>
-    </div>
+    <!-- ================= 3. HOME ================= -->
+    <section id="inicio" class="hero">
+      <figure class="hero__figura">
+        <img src="img/hero-gato.jpg" alt="Ilustración de un gato" class="hero__imagen">
+      </figure>
+      <div class="hero__texto">
+        <p class="seccion__etiqueta">Aprende con calma</p>
+        <h1 class="hero__titulo">ETHEOS</h1>
+        <p class="hero__lema">El carácter divino del conocimiento a través de tus pasiones</p>
+        <p class="hero__parrafo">
+          Vivimos rodeados de pantallas que compiten por cada segundo de nuestra atención. Las redes sociales fragmentan la mente con estímulos infinitos y vacíos.
+          Etheos nace como un refugio: un espacio sereno donde cada visita es un módulo breve de aprendizaje concentrado e individual, guiado por aquello que de verdad te apasiona. Aquí no hay notificaciones ni desplazamientos sin fin, solo tú, tu curiosidad y recursos cuidadosamente seleccionados para que cada minuto te deje algo valioso.
+        </p>
+        <div class="hero__acciones">
+          <a href="#catalogo" class="btn btn--oscuro">Explorar el catálogo</a>
+          <a href="#contacto" class="btn btn--secundario">Sugerir un recurso</a>
+        </div>
 
-    <ul class="hero__datos">
-      <li><strong>16</strong> pasiones</li>
-      <li><strong>+1M </strong> usuarios</li>
-      <li><strong>4</strong> recursos por módulo</li>
-    </ul>
-  </div>
-</section>
+        <ul class="hero__datos">
+          <li><strong>16</strong> pasiones</li>
+          <li><strong>+1M</strong> usuarios</li>
+          <li><strong>4</strong> recursos por módulo</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ================= 4. CATÁLOGO ================= -->
     <section id="catalogo" class="catalogo">
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Catálogo</p>
-        <h3 class="seccion__titulo">ELIGE TU PASIÓN </h3>
-        <p class="seccion__texto">Dieciséis puertas hacia el conocimiento,
-            <br>cada una abre un módulo con recursos</br> </p>
+        <h2 class="seccion__titulo">ELIGE TU PASIÓN</h2>
+        <p class="seccion__texto">Dieciséis puertas hacia el conocimiento,<br>cada una abre un módulo con recursos</p>
       </header>
 
       <div class="catalogo__grid">
         <article id="tarjeta-quimica" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\photo-1618053448748-b7251851d014.avif" alt="Química" class="tarjeta__imagen">
+          <img src="img/quimica.avif" alt="Química" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Química</h3>
           <p class="tarjeta__categoria">Ciencia</p>
           <a href="#vista-quimica" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-dibujo" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (3).jfif" alt="Dibujo" class="tarjeta__imagen">
+          <img src="img/dibujo.jpg" alt="Dibujo" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Dibujo</h3>
           <p class="tarjeta__categoria">Arte</p>
           <a href="#vista-dibujo" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-musica" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\76a685751dc97d3bf64553387fbe63a1.jpg" alt="Música" class="tarjeta__imagen">
+          <img src="img/musica.jpg" alt="Música" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Música</h3>
           <p class="tarjeta__categoria">Arte</p>
           <a href="#vista-musica" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-poesia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (4).jfif" alt="Poesía" class="tarjeta__imagen">
+          <img src="img/poesia.jpg" alt="Poesía" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Poesía</h3>
           <p class="tarjeta__categoria">Letras</p>
           <a href="#vista-poesia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-deportes" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (5).jfif" alt="Deportes" class="tarjeta__imagen">
+          <img src="img/deportes.jpg" alt="Deportes" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Deportes</h3>
           <p class="tarjeta__categoria">Bienestar</p>
           <a href="#vista-deportes" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-historia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\images (3).jfif" alt="Historia" class="tarjeta__imagen">
+          <img src="img/historia.jpg" alt="Historia" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Historia</h3>
           <p class="tarjeta__categoria">Humanidades</p>
           <a href="#vista-historia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-astronomia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\escena-espacio-3d_1048-12587.avif" alt="Astronomía" class="tarjeta__imagen">
+          <img src="img/astronomia.avif" alt="Astronomía" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Astronomía</h3>
           <p class="tarjeta__categoria">Ciencia</p>
           <a href="#vista-astronomia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-programacion" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\cozy-evening-coding-stockcake.jpg" alt="Programación" class="tarjeta__imagen">
+          <img src="img/programacion.jpg" alt="Programación" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Programación</h3>
           <p class="tarjeta__categoria">Tecnología</p>
           <a href="#vista-programacion" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-fotografia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\reglas-fotografia.jpg" alt="Fotografía" class="tarjeta__imagen">
+          <img src="img/fotografia.jpg" alt="Fotografía" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Fotografía</h3>
           <p class="tarjeta__categoria">Arte</p>
           <a href="#vista-fotografia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-literatura" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (6).jfif" alt="Literatura" class="tarjeta__imagen">
+          <img src="img/literatura.jpg" alt="Literatura" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Literatura</h3>
           <p class="tarjeta__categoria">Letras</p>
           <a href="#vista-literatura" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-cocina" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\images (4).jfif" alt="Cocina" class="tarjeta__imagen">
+          <img src="img/cocina.jpg" alt="Cocina" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Cocina</h3>
           <p class="tarjeta__categoria">Oficios</p>
           <a href="#vista-cocina" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-idiomas" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\images (5).jfif" alt="Idiomas" class="tarjeta__imagen">
+          <img src="img/idiomas.jpg" alt="Idiomas" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Idiomas</h3>
           <p class="tarjeta__categoria">Comunicación</p>
           <a href="#vista-idiomas" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-biologia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (7).jfif" alt="Biología" class="tarjeta__imagen">
+          <img src="img/biologia.jpg" alt="Biología" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Biología</h3>
           <p class="tarjeta__categoria">Ciencia</p>
           <a href="#vista-biologia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-filosofia" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\descarga (8).jfif" alt="Filosofía" class="tarjeta__imagen">
+          <img src="img/filosofia.jpg" alt="Filosofía" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Filosofía</h3>
           <p class="tarjeta__categoria">Humanidades</p>
           <a href="#vista-filosofia" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-cine" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\images.jfif" alt="Cine" class="tarjeta__imagen">
+          <img src="img/cine.jpg" alt="Cine" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Cine</h3>
           <p class="tarjeta__categoria">Arte</p>
           <a href="#vista-cine" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
-
         <article id="tarjeta-arquitectura" class="tarjeta">
-          <img src="c:\Users\USUARIO\Downloads\images (6).jfif" alt="Arquitectura" class="tarjeta__imagen">
+          <img src="img/arquitectura.jpg" alt="Arquitectura" class="tarjeta__imagen">
           <h3 class="tarjeta__titulo">Arquitectura</h3>
           <p class="tarjeta__categoria">Diseño</p>
           <a href="#vista-arquitectura" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
       </div>
 
-
-
       <!-- ===== VISTAS INTERNAS (ocultas, se muestran con :target) ===== -->
 
       <!-- 1. Química -->
-
       <section id="vista-quimica" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Química</h2>
           <p class="vista__descripcion">La química es el lenguaje secreto de la materia. Estudiarla es aprender a leer cómo los átomos se unen, se separan y se transforman para dar origen a todo lo que tocas, respiras y comes. En este módulo desarrollarás pensamiento analítico al comprender la estructura atómica, la tabla periódica y las reacciones como procesos lógicos y predecibles, conectando la teoría con fenómenos cotidianos como la cocción de un alimento o la oxidación del metal.</p>
         </header>
         <div class="vista__recursos">
           <a href="https://www.youtube.com/results?search_query=historia+de+la+tabla+periodica+explicada" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>La historia de la tabla periódica</small></span></a>
-
           <a href="https://es.khanacademy.org/science/chemistry" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Química en Khan Academy</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Dr._Stone" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Dr. Stone</small></span></a>
-
           <a href="https://phet.colorado.edu/es/simulations/build-an-atom" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>PhET: Construye un átomo</small></span></a>
         </div>
       </section>
-
       <!-- 2. Dibujo -->
-
       <section id="vista-dibujo" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-         <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Dibujo</h2>
           <p class="vista__descripcion">Dibujar es entrenar la mirada antes que la mano. Este módulo te invita a observar formas, proporciones, luces y sombras con atención plena, convirtiendo cada trazo en un ejercicio de concentración. Practicarás el dibujo gestual y la construcción con figuras básicas, habilidades que fortalecen la paciencia, la percepción espacial y la capacidad de expresar ideas sin palabras.</p>
         </header>
         <div class="vista__recursos">
           <a href="https://www.youtube.com/results?search_query=dibujo+gestual+para+principiantes" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Dibujo gestual para principiantes</small></span></a>
-
           <a href="https://drawabox.com/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Drawabox: fundamentos del dibujo</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Blue_Period" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Blue Period</small></span></a>
-
           <a href="https://sketch.io/sketchpad/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Lienzo virtual Sketchpad</small></span></a>
         </div>
       </section>
-
       <!-- 3. Música -->
-
       <section id="vista-musica" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-       <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Música</h2>
           <p class="vista__descripcion">La música es matemática que se siente. En este módulo descubrirás los cimientos de la teoría musical: notas, escalas, ritmo e intervalos, comprendiendo por qué ciertas combinaciones de sonidos nos emocionan. Escuchar activamente y experimentar con sonidos fortalece la memoria, la coordinación y la sensibilidad emocional, transformando la música de fondo en una experiencia consciente.</p>
         </header>
         <div class="vista__recursos">
           <a href="https://www.youtube.com/results?search_query=teoria+musical+basica+desde+cero" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Teoría musical desde cero</small></span></a>
-
           <a href="https://www.musictheory.net/lessons" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Lecciones de musictheory.net</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Shigatsu_wa_Kimi_no_Uso" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Your Lie in April</small></span></a>
-
           <a href="https://musiclab.chromeexperiments.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Chrome Music Lab</small></span></a>
         </div>
       </section>
-
       <!-- 4. Poesía -->
-
       <section id="vista-poesia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Poesía</h2>
           <p class="vista__descripcion">La poesía condensa el mundo en pocas palabras. Este módulo te enseña a leer despacio, a detenerte en la imagen, el ritmo y la metáfora, y a escribir tus propios versos. Leer y crear poesía amplía el vocabulario, afina la empatía y te devuelve el placer de la lectura pausada, justo lo contrario del consumo rápido de contenido.</p>
         </header>
         <div class="vista__recursos">
           <a href="https://www.youtube.com/results?search_query=como+leer+y+escribir+poesia" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Cómo leer y escribir poesía</small></span></a>
-
           <a href="https://www.poetryfoundation.org/learn" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Poetry Foundation: Learn</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Violet_Evergarden" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Violet Evergarden</small></span></a>
-
           <a href="https://www.rhymezone.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>RhymeZone: taller de rimas</small></span></a>
         </div>
       </section>
-
       <!-- 5. Deportes -->
-
       <section id="vista-deportes" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Deportes</h2>
           <p class="vista__descripcion">El deporte es ciencia en movimiento. Aquí comprenderás la física detrás de un lanzamiento, la fisiología del esfuerzo y la psicología de la disciplina. Este módulo une cuerpo y mente para que entiendas por qué entrenar mejora tu concentración, tu estado de ánimo y tu salud, y cómo aplicar esos principios a tu rutina diaria.</p>
         </header>
         <div class="vista__recursos">
           <a href="https://www.youtube.com/results?search_query=ciencia+del+deporte+explicada" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>La ciencia del deporte</small></span></a>
-
           <a href="https://www.who.int/es/news-room/fact-sheets/detail/physical-activity" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>OMS: Actividad física</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Haiky%C5%AB" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Haikyu!!</small></span></a>
-
           <a href="https://phet.colorado.edu/es/simulations/projectile-motion" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>PhET: Movimiento de proyectiles</small></span></a>
         </div>
       </section>
-
       <!-- 6. Historia -->
-
       <section id="vista-historia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Historia</h2>
           <p class="vista__descripcion">Comprender la historia es entender quiénes somos. Este módulo te propone mirar el pasado como una red de causas y consecuencias, analizando civilizaciones, conflictos y descubrimientos con pensamiento crítico. Aprenderás a contrastar fuentes, reconocer patrones que se repiten y valorar la memoria colectiva como herramienta para construir un mejor presente.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=historia+universal+resumen+civilizaciones" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Las grandes civilizaciones</small></span></a>
-
           <a href="https://www.worldhistory.org/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>World History Encyclopedia</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Vinland_Saga" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Vinland Saga</small></span></a>
-
           <a href="https://artsandculture.google.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Google Arts &amp; Culture</small></span></a>
         </div>
       </section>
-
       <!-- 7. Astronomía -->
-
       <section id="vista-astronomia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-         <header class="vista__cabecera" style="background-color: ghostwhite;">
-         <h2 class="vista__titulo">Astronomía</h2>
+        <header class="vista__cabecera">
+          <h2 class="vista__titulo">Astronomía</h2>
           <p class="vista__descripcion">Mirar el cielo es la forma más antigua de hacer ciencia. En este módulo explorarás el sistema solar, el ciclo de vida de las estrellas y la escala inmensa del universo. La astronomía despierta asombro y humildad, y te enseña a razonar con evidencias, a usar modelos y a hacerte preguntas que la humanidad aún intenta responder.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=escala+del+universo+explicada" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>La escala del universo</small></span></a>
-
           <a href="https://science.nasa.gov/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>NASA Science</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Cosmos:_A_Spacetime_Odyssey" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Cosmos: A Spacetime Odyssey</small></span></a>
-
           <a href="https://stellarium-web.org/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Stellarium Web: planetario</small></span></a>
         </div>
       </section>
-
       <!-- 8. Programación -->
-
       <section id="vista-programacion" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Programación</h2>
           <p class="vista__descripcion">Programar es aprender a pensar con claridad. Este módulo te introduce al pensamiento computacional: dividir problemas grandes en pasos pequeños, reconocer patrones y diseñar soluciones lógicas. Pasarás de consumir tecnología a crearla, entendiendo los fundamentos de la web y la lógica de algoritmos con ejercicios breves y concretos.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=pensamiento+computacional+para+principiantes" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Pensamiento computacional</small></span></a>
-
           <a href="https://developer.mozilla.org/es/docs/Learn" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>MDN: Aprende desarrollo web</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Mr._Robot" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Mr. Robot</small></span></a>
-
           <a href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Editor de Scratch (MIT)</small></span></a>
         </div>
       </section>
-
       <!-- 9. Fotografía -->
-
       <section id="vista-fotografia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Fotografía</h2>
           <p class="vista__descripcion">Fotografiar es escribir con luz. Este módulo te enseña el triángulo de exposición (apertura, velocidad e ISO), la composición y la lectura de la luz natural. Aprender fotografía transforma tu manera de ver: dejas de tomar fotos al azar y comienzas a construir imágenes con intención, paciencia y sensibilidad estética.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=triangulo+de+exposicion+fotografia" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>El triángulo de exposición</small></span></a>
-
           <a href="https://www.cambridgeincolour.com/tutorials.htm" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Cambridge in Colour</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Abstract:_The_Art_of_Design" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Abstract: The Art of Design</small></span></a>
-
           <a href="https://camerasim.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>CameraSim: simulador de cámara</small></span></a>
         </div>
       </section>
-
       <!-- 10. Literatura -->
-
       <section id="vista-literatura" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
-        <h2 class="vista__titulo">Literatura</h2>
-
+        <header class="vista__cabecera">
+          <h2 class="vista__titulo">Literatura</h2>
           <p class="vista__descripcion">La literatura nos permite vivir mil vidas. Este módulo te acompaña a leer con profundidad: identificar narradores, estructuras, símbolos y contextos históricos de las grandes obras. La lectura sostenida es el mejor antídoto contra la atención fragmentada, porque entrena la imaginación, la comprensión y el pensamiento crítico.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=como+analizar+una+obra+literaria" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Cómo analizar una obra literaria</small></span></a>
-
           <a href="https://www.cervantesvirtual.com/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Biblioteca Virtual Miguel de Cervantes</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Bung%C5%8D_Stray_Dogs" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Bungo Stray Dogs</small></span></a>
-
           <a href="https://www.gutenberg.org/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Proyecto Gutenberg: lectura libre</small></span></a>
         </div>
       </section>
-
       <!-- 11. Cocina -->
-
       <section id="vista-cocina" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-      <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Cocina</h2>
           <p class="vista__descripcion">Cocinar es química, cultura y cuidado al mismo tiempo. En este módulo entenderás qué ocurre cuando un alimento se dora, por qué la sal transforma los sabores y cómo las técnicas básicas te dan libertad para crear. La cocina enseña planificación, atención a los detalles y respeto por las tradiciones de cada pueblo.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=ciencia+de+la+cocina+reaccion+de+maillard" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>La reacción de Maillard</small></span></a>
-
           <a href="https://www.seriouseats.com/the-food-lab" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Serious Eats: The Food Lab</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Shokugeki_no_S%C5%8Dma" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Food Wars! Shokugeki no Soma</small></span></a>
-
           <a href="https://www.supercook.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Supercook: recetas con lo que tienes</small></span></a>
         </div>
       </section>
-
       <!-- 12. Idiomas -->
-
       <section id="vista-idiomas" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Idiomas</h2>
           <p class="vista__descripcion">Cada idioma es una ventana a otra forma de pensar. Este módulo te propone sesiones cortas y constantes, la estrategia más eficaz según la ciencia del aprendizaje, para incorporar vocabulario, pronunciación y estructuras gramaticales. Aprender una lengua fortalece la memoria, la flexibilidad cognitiva y la conexión con otras culturas.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=como+aprender+un+idioma+tecnicas+efectivas" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Técnicas para aprender idiomas</small></span></a>
-
           <a href="https://cvc.cervantes.es/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Centro Virtual Cervantes</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Extr@" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Extr@ (serie educativa)</small></span></a>
-
           <a href="https://www.duolingo.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Duolingo: práctica diaria</small></span></a>
         </div>
       </section>
-
       <!-- 13. Biología -->
-
       <section id="vista-biologia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-        <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Biología</h2>
           <p class="vista__descripcion">La biología estudia el milagro más cotidiano: la vida. En este módulo recorrerás desde la célula hasta los ecosistemas, entendiendo cómo funciona tu propio cuerpo, cómo evolucionan las especies y por qué cada organismo cumple un papel en el equilibrio del planeta. Es una invitación a cuidar la salud y la naturaleza desde el conocimiento.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=la+celula+explicada+biologia" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>La célula explicada</small></span></a>
-
           <a href="https://es.khanacademy.org/science/biology" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Biología en Khan Academy</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Hataraku_Saib%C5%8D" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Cells at Work!</small></span></a>
-
           <a href="https://phet.colorado.edu/es/simulations/natural-selection" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>PhET: Selección natural</small></span></a>
         </div>
       </section>
-
       <!-- 14. Filosofía -->
-
       <section id="vista-filosofia" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-       <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Filosofía</h2>
           <p class="vista__descripcion">La filosofía es el arte de hacer buenas preguntas. Este módulo te acerca a las grandes corrientes del pensamiento, de Sócrates a los existencialistas, para reflexionar sobre la ética, el conocimiento y el sentido de la vida. Filosofar entrena la argumentación, la escucha y la capacidad de cuestionar lo que damos por sentado.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=introduccion+a+la+filosofia+socrates" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Introducción a la filosofía</small></span></a>
-
           <a href="https://plato.stanford.edu/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Stanford Encyclopedia of Philosophy</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/The_Good_Place" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>The Good Place</small></span></a>
-
           <a href="https://www.philosophyexperiments.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Philosophy Experiments</small></span></a>
         </div>
       </section>
-
       <!-- 15. Cine -->
       <section id="vista-cine" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-       <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Cine</h2>
           <p class="vista__descripcion">El cine es la síntesis de todas las artes. En este módulo aprenderás a leer el lenguaje audiovisual: planos, encuadres, montaje, color y sonido. Ver cine con mirada analítica convierte el entretenimiento pasivo en una experiencia de aprendizaje, y te prepara para contar tus propias historias con intención.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=lenguaje+cinematografico+tipos+de+planos" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>El lenguaje cinematográfico</small></span></a>
-
           <a href="https://www.filmsite.org/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>Filmsite: historia del cine</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Eiz%C5%8Dken_ni_wa_Te_o_Dasu_na" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Keep Your Hands Off Eizouken!</small></span></a>
-
           <a href="https://www.studiobinder.com/storyboard-creator/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Creador de storyboards</small></span></a>
         </div>
       </section>
-
       <!-- 16. Arquitectura -->
       <section id="vista-arquitectura" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
-      <header class="vista__cabecera" style="background-color: ghostwhite;">
+        <header class="vista__cabecera">
           <h2 class="vista__titulo">Arquitectura</h2>
           <p class="vista__descripcion">La arquitectura es el arte en el que habitamos cotidianamente. En este módulo explorarás la armonía entre la forma, la función y la luz, comprendiendo cómo las estructuras moldean el comportamiento humano y el bienestar. Aprenderás a leer las ciudades, reconociendo estilos, proporciones e innovaciones sostenibles que transforman nuestro entorno.</p>
         </header>
         <div class="vista__recursos">
-
           <a href="https://www.youtube.com/results?search_query=principios+basicos+de+arquitectura+y+espacio" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📺</span><span class="recurso__texto"><strong>Video Recomendado</strong><small>Principios de espacio y forma</small></span></a>
-
           <a href="https://www.archdaily.co/" target="_blank" rel="noopener noreferrer" class="recurso"><span class="recurso__icono">📰</span><span class="recurso__texto"><strong>Artículo de Alto Valor</strong><small>ArchDaily: catálogo arquitectónico</small></span></a>
-
           <a href="https://es.wikipedia.org/wiki/Grandes_dise%C3%B1os" target="_blank" rel="noopener noreferrer" class="recurso recurso--serie"><span class="recurso__icono">🎬</span><span class="recurso__texto"><strong>Serie de Referencia</strong><small>Grand Designs</small></span></a>
-
           <a href="https://floorplanner.com/" target="_blank" rel="noopener noreferrer" class="recurso recurso--sim"><span class="recurso__icono">🧪</span><span class="recurso__texto"><strong>Sesión Interactiva</strong><small>Floorplanner: diseñador de espacios</small></span></a>
         </div>
       </section>
@@ -520,11 +414,11 @@
     <section id="contacto" class="contacto">
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Comunidad</p>
-        <h2 class="seccion__titulo">SUGIERE UN RECURSO </h2>
+        <h2 class="seccion__titulo">SUGIERE UN RECURSO</h2>
         <p class="seccion__texto">Acceso libre, sin registro. Ayúdanos a ofrecer el mejor conocimiento.</p>
       </header>
 
-      <form class="formulario" action="#" method="post">
+      <form class="formulario" id="form-sugerencia" action="#" method="post">
         <fieldset class="formulario__fieldset">
           <legend class="formulario__legend">Tu recomendación</legend>
           <div class="campo">
@@ -535,7 +429,6 @@
             <label for="sug-correo" class="campo__label">Tu Correo Electrónico</label>
             <input type="email" id="sug-correo" name="correo" class="campo__input" placeholder="tucorreo@ejemplo.com" required>
           </div>
-
           <div class="campo">
             <label for="sug-categoria" class="campo__label">Categoría del Hobby</label>
             <select id="sug-categoria" name="categoria" class="campo__input campo__select" required>
@@ -567,17 +460,18 @@
             <textarea id="sug-motivo" name="motivo" class="campo__input campo__textarea" rows="6" placeholder="Cuéntanos su valor educativo..." required></textarea>
           </div>
           <button type="submit" class="btn btn--vino btn--ancho">Enviar sugerencia</button>
+          <p class="formulario__estado" id="sug-estado" role="status"></p>
         </fieldset>
       </form>
     </section>
 
-    <!-- ================= 6. PANEL ADMIN ================= -->
-
-    <section id="panel-admin" class="panel" style="display: none;">
+    <!-- ================= 6. PANEL ADMIN (oculto hasta iniciar sesión) ================= -->
+    <section id="panel-admin" class="panel" hidden>
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Administración</p>
         <h2 class="seccion__titulo">Panel de Etheos</h2>
         <p class="seccion__texto">Revisa, aprueba o rechaza las sugerencias de la comunidad.</p>
+        <button type="button" class="btn btn--oscuro panel__salir" id="btn-salir">Cerrar sesión</button>
       </header>
       <div class="panel__tabla-contenedor">
         <table class="panel__tabla">
@@ -590,30 +484,46 @@
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="panel-filas">
             <tr>
               <td>Laura Martínez</td>
               <td><span class="etiqueta">Biología</span></td>
               <td><a href="https://phet.colorado.edu/es/" target="_blank" rel="noopener noreferrer" class="panel__link">phet.colorado.edu</a></td>
               <td>Simuladores gratuitos ideales para entender procesos celulares.</td>
-              <td class="panel__acciones"><button type="button" class="btn btn--aprobar">Aprobar Recurso</button><button type="button" class="btn btn--rechazar">Rechazar Recurso</button></td>
+              <td>
+                <div class="panel__acciones">
+                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
+                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <td>Andrés Rojas</td>
               <td><span class="etiqueta">Música</span></td>
               <td><a href="https://www.musictheory.net/" target="_blank" rel="noopener noreferrer" class="panel__link">musictheory.net</a></td>
               <td>Lecciones visuales y breves de teoría musical.</td>
-              <td class="panel__acciones"><button type="button" class="btn btn--aprobar">Aprobar Recurso</button><button type="button" class="btn btn--rechazar">Rechazar Recurso</button></td>
+              <td>
+                <div class="panel__acciones">
+                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
+                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
+                </div>
+              </td>
             </tr>
             <tr>
               <td>Camila Torres</td>
               <td><span class="etiqueta">Astronomía</span></td>
               <td><a href="https://stellarium-web.org/" target="_blank" rel="noopener noreferrer" class="panel__link">stellarium-web.org</a></td>
               <td>Planetario en el navegador para observar el cielo nocturno.</td>
-              <td class="panel__acciones"><button type="button" class="btn btn--aprobar">Aprobar Recurso</button><button type="button" class="btn btn--rechazar">Rechazar Recurso</button></td>
+              <td>
+                <div class="panel__acciones">
+                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
+                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
+        <p class="panel__vacio" id="panel-vacio" hidden>No hay sugerencias por revisar.</p>
       </div>
     </section>
 
@@ -621,13 +531,11 @@
     <aside id="ia-guardian" class="guardian">
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Asistente</p>
-        <h2 class="seccion__titulo">GUARDIÁN DE ETHEOS </h2>
+        <h2 class="seccion__titulo">GUARDIÁN DE ETHEOS</h2>
       </header>
       <div class="guardian__grid">
         <figure class="guardian__figura">
-
           <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="Robot inteligente, Guardián de Etheos" class="guardian__robot">
-
         </figure>
         <div class="chat">
           <div class="chat__conversacion" id="chat-conversacion" aria-live="polite">
@@ -645,41 +553,29 @@
     </aside>
   </main>
 
-  <!-- ================= 8. FOOTER ================= -->
+ <!-- ================= 8. FOOTER ================= -->
+<footer class="footer">
+  <div class="footer__contenido">
 
-  <footer class="footer">
-    <p class="footer__logo">ETHEOS</p>
-    <p class="footer__texto"> El carácter divino del conocimiento a través de tus pasiones
-    <p class="footer__copy">&copy; 2026 Etheos. Todos los derechos reservados.</p>
-  </footer>
+    <!-- Izquierda: contacto -->
+    <address class="footer__contacto">
+      <p class="footer__etiqueta">Contacto</p>
+      <p class="footer__nombre">Paula Andrea Barrios Salazar</p>
+      <a href="mailto:paulabarrios.cp@gmail.com" class="footer__enlace">✉ paulabarrios.cp@gmail.com</a>
+      <a href="tel:+573006813506" class="footer__enlace">☎ +57 300 681 3506</a>
+    </address>
 
-  <script>
-    // Login: muestra el panel de curaduría
-    document.getElementById('form-login').addEventListener('submit', function (e) {
-      e.preventDefault();
-      document.getElementById('login-mensaje').textContent = 'Inicio de sesión completo ✓';
-      setTimeout(function () {
-        document.getElementById('panel-admin').style.display = 'block';
-        location.hash = 'panel-admin';
-      }, 900);
-    });
+    <!-- Derecha: marca -->
+    <div class="footer__marca">
+      <p class="footer__logo">ETHEOS</p>
+      <p class="footer__texto">El carácter divino del conocimiento
+       a través de tus pasiones</p>
+    </div>
+  </div>
+  <p class="footer__copy">&copy; 2026 Etheos. Todos los derechos reservados.</p>
+</footer>
 
-    // Chat del Guardián
-    document.getElementById('chat-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var input = document.getElementById('chat-input');
-      var caja = document.getElementById('chat-conversacion');
-      var usuario = document.createElement('div');
-      usuario.className = 'chat__mensaje chat__mensaje--usuario';
-      usuario.textContent = input.value;
-      caja.appendChild(usuario);
-      var ia = document.createElement('div');
-      ia.className = 'chat__mensaje chat__mensaje--ia';
-      ia.textContent = 'Excelente pregunta. Te recomiendo explorar el módulo relacionado en el catálogo y dedicarle tiempo de atención plena.';
-      caja.appendChild(ia);
-      caja.scrollTop = caja.scrollHeight;
-      input.value = '';
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
+
 </html>
