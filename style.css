@@ -445,7 +445,7 @@ ul {
 .hero {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr; /* más espacio para la imagen */
+  grid-template-columns: 1.6fr 1fr;   /* más espacio para la imagen */
   align-items: center;
   gap: var(--espacio-lg);
   padding: calc(var(--altura-header) + var(--espacio-md))
@@ -465,7 +465,7 @@ ul {
   grid-row: 1;
   justify-self: center;
   width: 100%;
-  max-width: 760px;
+  max-width: 1000px;
   margin: 0;
 }
 
@@ -474,9 +474,9 @@ ul {
   height: auto;
   object-fit: contain;
   mix-blend-mode: multiply;           /* el blanco del JPG desaparece */
-  filter: drop-shadow(0 25px 35px rgba(107, 30, 46, 0.25));
-  /* La animación va en la imagen y no en la figura: si va en el
-     contenedor, el modo de mezcla deja de funcionar. */
+  /* Difuminado de bordes: opaca en el centro, transparente hacia afuera */
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 45%, transparent 120%);
+  mask-image: radial-gradient(ellipse at center, #000 45%, transparent 120%);
   animation: flotar 6s ease-in-out infinite;
 }
 
@@ -562,6 +562,7 @@ ul {
 .catalogo:has(.vista:target) .catalogo__grid { display: none; }
 
 .tarjeta {
+  position: relative;   /* para ubicar el corazón de favorito sobre la tarjeta */
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -598,6 +599,38 @@ ul {
   color: var(--color-marron-suave);
   padding: 0 0.3rem;
   margin-bottom: var(--espacio-sm);
+}
+
+/* Botón de favorito (corazón) sobre la imagen de la tarjeta.
+   Lo crea app.js; no está escrito en el HTML. */
+.tarjeta__fav {
+  position: absolute;
+  top: 1.6rem;
+  right: 1.6rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.92);
+  color: var(--color-vino);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--sombra-suave);
+  transition: var(--transicion);
+}
+
+.tarjeta__fav:hover {
+  transform: scale(1.1);
+}
+
+/* Favorito activo: corazón lleno sobre fondo vino */
+.tarjeta__fav[aria-pressed="true"] {
+  background-color: var(--color-vino);
+  color: var(--color-fondo);
 }
 
 /* ---------- 10. VISTAS INTERNAS ---------- */
@@ -727,7 +760,7 @@ ul {
   grid-column: 1 / -1;
 }
 
-/* El campo del motivo (5.º) y el botón ocupan todo el ancho */
+/* El campo del motivo (5.º), el botón y el mensaje ocupan todo el ancho */
 .formulario__fieldset .campo:nth-of-type(5),
 .formulario__fieldset > .btn,
 .formulario__estado {
@@ -915,71 +948,47 @@ ul {
   color: var(--color-rosa);
 }
 
-/* Dos columnas del mismo ancho, centradas verticalmente entre sí */
+/* Una sola columna: el contacto queda en el centro de todo el footer */
 .footer__contenido {
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: var(--espacio-lg);
+  grid-template-columns: 1fr;
+  justify-items: center;
   padding-bottom: var(--espacio-md);
 }
 
-/* --- Izquierda: contacto --- */
+/* --- Contacto (centrado) --- */
 .footer__contacto {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.3rem;
-  text-align: left;
-  font-style: normal; /* <address> viene en cursiva por defecto */
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  font-style: normal;           /* <address> viene en cursiva por defecto */
 }
 
 .footer__etiqueta {
-  font-size: 0.75rem;
+  font-size: 1rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-amarillo);
 }
 
 .footer__nombre {
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-fondo);
 }
 
 .footer__enlace {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   color: var(--color-rosa);
   transition: var(--transicion);
 }
 
 .footer__enlace:hover {
   color: var(--color-amarillo);
-}
-
-/* --- Derecha: marca --- */
-.footer__marca {
-  justify-self: end;          
-  width: 100%;
-  max-width: 340px;           
-  display: flex;
-  flex-direction: column;
-  align-items: center;       
-  gap: 0.3rem;
-  text-align: center;
-}
-
-.footer__logo {
-  font-family: var(--fuente-serif);
-  font-size: 1.8rem;
-  font-weight: 900;
-  letter-spacing: 0.25em;
-  color: var(--color-fondo);
-}
-.footer__texto {
-  font-family: var(--fuente-serif);
-  font-style: italic;
 }
 
 /* --- Derechos: abajo y centrados --- */
@@ -1037,7 +1046,7 @@ ul {
     grid-column: 1;
     grid-row: 1;
     justify-self: center;
-    max-width: 420px;
+    max-width: 620px;
   }
   .hero__texto {
     grid-column: 1;
@@ -1080,23 +1089,11 @@ ul {
   .guardian__figura {
     order: -1;
   }
-    /* Footer: en celular las dos columnas se apilan y se centran */
+
+  /* Footer: menos margen lateral en celular (el contacto ya está centrado) */
   .footer {
     padding-left: var(--espacio-md);
     padding-right: var(--espacio-md);
-  }
-  .footer__contenido {
-    grid-template-columns: 1fr;
-    gap: var(--espacio-md);
-    text-align: center;
-  }
-  .footer__contacto,
-  .footer__marca {
-    align-items: center;
-    text-align: center;
-  }
-  .footer__marca {
-    order: -1; /* en celular el logo va arriba y el contacto abajo */
   }
 }
 
