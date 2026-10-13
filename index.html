@@ -456,8 +456,8 @@
             <input type="url" id="sug-enlace" name="enlace" class="campo__input" placeholder="https://..." required>
           </div>
           <div class="campo">
-            <label for="sug-motivo" class="campo__label">¿Por qué quieres recomendar este contenido?</label>
-            <textarea id="sug-motivo" name="motivo" class="campo__input campo__textarea" rows="6" placeholder="Cuéntanos su valor educativo..." required></textarea>
+            <label class="campo__label">¿Por qué quieres recomendar este contenido?</label>
+<textarea id="sug-justificacion" name="justificacion" class="campo__input campo__textarea" placeholder="Escribe tus motivos aquí..."></textarea>
           </div>
           <button type="submit" class="btn btn--vino btn--ancho">Enviar sugerencia</button>
           <p class="formulario__estado" id="sug-estado" role="status"></p>
@@ -465,7 +465,7 @@
       </form>
     </section>
 
-    <!-- ================= 6. PANEL ADMIN ================= -->
+        <!-- ================= 6. PANEL ADMIN ================= -->
     <section id="panel-admin" class="panel" hidden>
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Administración</p>
@@ -484,50 +484,13 @@
               <th scope="col">Acciones</th>
             </tr>
           </thead>
-          <tbody id="panel-filas">
-            <tr>
-              <td>Laura Martínez</td>
-              <td><span class="etiqueta">Biología</span></td>
-              <td><a href="https://phet.colorado.edu/es/" target="_blank" rel="noopener noreferrer" class="panel__link">phet.colorado.edu</a></td>
-              <td>Simuladores gratuitos ideales para entender procesos celulares.</td>
-              <td>
-                <div class="panel__acciones">
-                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
-                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Andrés Rojas</td>
-              <td><span class="etiqueta">Música</span></td>
-              <td><a href="https://www.musictheory.net/" target="_blank" rel="noopener noreferrer" class="panel__link">musictheory.net</a></td>
-              <td>Lecciones visuales y breves de teoría musical.</td>
-              <td>
-                <div class="panel__acciones">
-                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
-                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>Camila Torres</td>
-              <td><span class="etiqueta">Astronomía</span></td>
-              <td><a href="https://stellarium-web.org/" target="_blank" rel="noopener noreferrer" class="panel__link">stellarium-web.org</a></td>
-              <td>Planetario en el navegador para observar el cielo nocturno.</td>
-              <td>
-                <div class="panel__acciones">
-                  <button type="button" class="btn btn--aprobar" data-accion="aprobar">Aprobar Recurso</button>
-                  <button type="button" class="btn btn--rechazar" data-accion="rechazar">Rechazar Recurso</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+          <tbody id="panel-filas"></tbody>
         </table>
         <p class="panel__vacio" id="panel-vacio" hidden>No hay sugerencias por revisar.</p>
       </div>
     </section>
 
-    <!-- ================= 7. GUARDIÁN IA ================= -->
+        <!-- ================= 7. GUARDIÁN IA ================= -->
     <aside id="ia-guardian" class="guardian">
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Asistente</p>
@@ -540,7 +503,7 @@
         <div class="chat">
           <div class="chat__conversacion" id="chat-conversacion" aria-live="polite">
             <div class="chat__mensaje chat__mensaje--ia">
-              <p>Hola, soy la AI de Etheos. Estoy aquí solo para acompañar tu aprendizaje: pregúntame sobre cualquiera de tus pasiones y te guiaré hacia el conocimiento con calma y enfoque.</p>
+              <p>Saludos cordiales. Soy el Guardián de Etheos, un asistente diseñado exclusivamente para acompañar su proceso de aprendizaje. Le invito a consultar sobre cualquiera de sus pasiones o disciplinas de interés; le orientaré hacia el conocimiento con absoluta calma, método y enfoque.</p>
             </div>
           </div>
           <form class="chat__form" id="chat-form">
