@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <!-- ================= 1. BARRA DE NAVEGACIÓN ================= -->
   <header class="header">
     <a href="#inicio" class="logo">HOME</a>
@@ -23,7 +22,7 @@
         <li><a href="#catalogo" class="nav__enlace">Catálogo</a></li>
         <li><a href="#contacto" class="nav__enlace">Contacto</a></li>
         <li><a href="#ia-guardian" class="nav__enlace">Guardián IA</a></li>
-        <li><a href="#login" class="btn btn--admin">👑</a></li>
+        <li><a href="#login" class="btn btn--admin" aria-label="Acceso administrador">👑</a></li>
       </ul>
     </nav>
   </header>
@@ -36,7 +35,6 @@
       <div class="modal__icono" aria-hidden="true">✦</div>
       <h2 id="login-titulo" class="modal__titulo">Admin Login</h2>
       <p class="modal__subtitulo">Ingresa tus credenciales para aportar el conocimiento de la comunidad.</p>
-
       <form class="modal__form" id="form-login">
         <label for="login-usuario" class="campo__label">Usuario</label>
         <input type="text" id="login-usuario" name="usuario" class="campo__input" placeholder="Tu usuario" autocomplete="username" required>
@@ -47,8 +45,8 @@
       </form>
     </div>
   </div>
-
   <main>
+
     <!-- ================= 3. HOME ================= -->
     <section id="inicio" class="hero">
       <figure class="hero__figura">
@@ -66,7 +64,6 @@
           <a href="#catalogo" class="btn btn--oscuro">Explorar el catálogo</a>
           <a href="#contacto" class="btn btn--secundario">Sugerir un recurso</a>
         </div>
-
         <ul class="hero__datos">
           <li><strong>16</strong> pasiones</li>
           <li><strong>+1M</strong> usuarios</li>
@@ -81,8 +78,13 @@
         <p class="seccion__etiqueta">Catálogo</p>
         <h2 class="seccion__titulo">ELIGE TU PASIÓN</h2>
         <p class="seccion__texto">Dieciséis puertas hacia el conocimiento,<br>cada una abre un módulo con recursos</p>
+        <div class="buscador" role="search">
+          <label for="buscador-input" class="sr-only">Buscar en el catálogo</label>
+          <span class="buscador__icono" aria-hidden="true">🔍</span>
+          <input type="search" id="buscador-input" class="campo__input buscador__input" placeholder="Busca una tarjeta..." autocomplete="off">
+          <button type="button" class="buscador__limpiar" id="buscador-limpiar" aria-label="Borrar búsqueda" hidden>✕</button>
+        </div>
       </header>
-
       <div class="catalogo__grid">
         <article id="tarjeta-quimica" class="tarjeta">
           <img src="img/quimica.avif" alt="Química" class="tarjeta__imagen">
@@ -181,9 +183,9 @@
           <a href="#vista-arquitectura" class="btn btn--plano">Entrar al conocimiento</a>
         </article>
       </div>
+      <p class="catalogo__vacio" id="catalogo-vacio" role="status" hidden>No encontramos nada con esa búsqueda. Prueba con otra palabra.</p>
 
       <!-- ===== VISTAS INTERNAS (ocultas, se muestran con :target) ===== -->
-
       <!-- 1. Química -->
       <section id="vista-quimica" class="vista">
         <a href="#catalogo" class="btn btn--volver">← Volver al Catálogo</a>
@@ -409,7 +411,6 @@
         </div>
       </section>
     </section>
-
     <!-- ================= 5. CONTACTO ================= -->
     <section id="contacto" class="contacto">
       <header class="seccion__cabecera">
@@ -417,7 +418,6 @@
         <h2 class="seccion__titulo">SUGIERE UN RECURSO</h2>
         <p class="seccion__texto">Acceso libre, sin registro. Ayúdanos a ofrecer el mejor conocimiento.</p>
       </header>
-
       <form class="formulario" id="form-sugerencia" action="#" method="post">
         <fieldset class="formulario__fieldset">
           <legend class="formulario__legend">Tu recomendación</legend>
@@ -465,7 +465,7 @@
       </form>
     </section>
 
-    <!-- ================= 6. PANEL ADMIN (oculto hasta iniciar sesión) ================= -->
+    <!-- ================= 6. PANEL ADMIN ================= -->
     <section id="panel-admin" class="panel" hidden>
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Administración</p>
@@ -553,21 +553,18 @@
     </aside>
   </main>
 
- <!-- ================= 8. FOOTER ================= -->
-<footer class="footer">
-  <div class="footer__contenido">
-
-    <!-- Izquierda: contacto -->
-    <address class="footer__contacto">
-      <p class="footer__etiqueta">Contacto</p>
-      <p class="footer__nombre">Paula Andrea Barrios Salazar</p>
-      <a href="mailto:paulabarrios.cp@gmail.com" class="footer__enlace">✉ paulabarrios.cp@gmail.com</a>
-      <a href="tel:+573006813506" class="footer__enlace">☎ +57 300 681 3506</a>
-    </address>
-  </div>
-  <p class="footer__copy">&copy; 2026 Etheos. Todos los derechos reservados.</p>
-</footer>
+  <!-- ================= 8. FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer__contenido">
+      <address class="footer__contacto">
+        <p class="footer__etiqueta">Contacto</p>
+        <p class="footer__nombre">Paula Andrea Barrios Salazar</p>
+        <a href="mailto:paulabarrios.cp@gmail.com" class="footer__enlace">✉ paulabarrios.cp@gmail.com</a>
+        <a href="tel:+573006813506" class="footer__enlace">☎ +57 300 681 3506</a>
+      </address>
+    </div>
+    <p class="footer__copy">&copy; 2026 Etheos. Todos los derechos reservados.</p>
+  </footer>
   <script src="app.js"></script>
 </body>
-
 </html>
