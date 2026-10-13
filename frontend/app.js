@@ -1,9 +1,9 @@
 /* =========================================================
    ETHEOS — LÓGICA DEL FRONTEND
-   Lo marcado como TEMPORAL se reemplaza cuando exista el backend.
    ========================================================= */
 
 'use strict';
+
 /* ---------- 1. MENÚ MÓVIL ---------- */
 const botonMenu = document.getElementById('nav-toggle');
 const listaMenu = document.getElementById('nav-lista');
@@ -14,15 +14,12 @@ function cambiarMenu(abrir) {
   botonMenu.textContent = abrir ? '✕' : '☰';
 }
 botonMenu.addEventListener('click', () => cambiarMenu(!listaMenu.classList.contains('abierto')));
-// Al tocar un enlace del menú, se cierra para no tapar la página
 listaMenu.addEventListener('click', (e) => { if (e.target.closest('a')) cambiarMenu(false); });
 
 /* ---------- 2. LOGIN DEL ADMIN ---------- */
-// TEMPORAL: credenciales en el código = cualquiera puede leerlas. Solo para la demo;
-// la validación real se hará en el backend.
 const ADMIN_USUARIO = 'paubacted';
 const ADMIN_CLAVE = '1139123';
-const CLAVE_SESION = 'etheosAdmin'; // sessionStorage: se borra al cerrar la pestaña
+const CLAVE_SESION = 'etheosAdmin'; 
 const formLogin = document.getElementById('form-login');
 const mensajeLogin = document.getElementById('login-mensaje');
 const panelAdmin = document.getElementById('panel-admin');
@@ -30,12 +27,46 @@ function mostrarMensajeLogin(texto, esError) {
   mensajeLogin.textContent = texto;
   mensajeLogin.classList.toggle('modal__mensaje--error', esError);
 }
+// Declaramos la función para que consulte a MongoDB
+async function cargarSugerenciasAdmin() {
+  const filasPanel = document.getElementById('panel-filas');
+  const avisoVacio = document.getElementById('panel-vacio');
+  if (!filasPanel) return;
+  try {
+    const respuesta = await fetch('http://localhost:3000/api/admin/sugerencias');
+    const resultado = await respuesta.json();
+    if (resultado.ok) {
+      filasPanel.innerHTML = ''; 
+      if (resultado.sugerencias.length === 0) {
+        if (avisoVacio) avisoVacio.hidden = false;
+        return;
+      }
+      if (avisoVacio) avisoVacio.hidden = true;
+      resultado.sugerencias.forEach((sug) => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = sug._id; // Guardamos el ID de MongoDB en la fila
+        tr.innerHTML = `
+          <td><strong>${sug.nombre}</strong><br><small>${sug.correo}</small></td>
+          <td><span class="etiqueta">${sug.categoria}</span></td>
+          <td><a href="${sug.enlace}" target="_blank" class="panel__link">Ver recurso ↗</a></td>
+          <td>${sug.justificacion || '<i>Sin justificación</i>'}</td>
+          <td class="panel__acciones">
+            <button class="btn btn--aprobar" data-accion="aprobar">Aprobar</button>
+            <button class="btn btn--rechazar" data-accion="rechazar">Rechazar</button>
+          </td>
+        `;
+        filasPanel.appendChild(tr);
+      });
+    }
+  } catch (error) {
+    console.error('Error cargando el panel:', error);
+  }
+}
 formLogin.addEventListener('submit', (e) => {
   e.preventDefault();
   const usuario = document.getElementById('login-usuario').value.trim();
   const clave = document.getElementById('login-clave').value;
   const boton = formLogin.querySelector('button[type="submit"]');
-  // Estado de carga: evita doble clic y avisa que algo está pasando
   boton.disabled = true;
   boton.textContent = 'Verificando...';
   mostrarMensajeLogin('', false);
@@ -45,11 +76,13 @@ formLogin.addEventListener('submit', (e) => {
     if (usuario === ADMIN_USUARIO && clave === ADMIN_CLAVE) {
       sessionStorage.setItem(CLAVE_SESION, '1');
       mostrarMensajeLogin('Inicio de sesión completo ✓', false);
+      // CONEXIÓN: Cargamos los datos reales justo al iniciar sesión con éxito
+      cargarSugerenciasAdmin();
       setTimeout(() => {
         formLogin.reset();
         mostrarMensajeLogin('', false);
         panelAdmin.hidden = false;
-        location.hash = 'panel-admin'; // también cierra el modal (:target)
+        location.hash = 'panel-admin';
       }, 700);
     } else {
       mostrarMensajeLogin('Usuario o contraseña incorrectos.', true);
@@ -62,60 +95,123 @@ document.getElementById('btn-salir').addEventListener('click', () => {
   panelAdmin.hidden = true;
   location.hash = 'inicio';
 });
-// Si ya iniciaste sesión en esta pestaña, el panel sigue disponible al recargar
-if (sessionStorage.getItem(CLAVE_SESION) === '1') panelAdmin.hidden = false;
+// CONEXIÓN: Si la sesión ya estaba activa al recargar la página, vuelve a pintar la tabla real
+if (sessionStorage.getItem(CLAVE_SESION) === '1') {
+  panelAdmin.hidden = false;
+  cargarSugerenciasAdmin();
+}
 
-/* ---------- 3. PANEL: APROBAR / RECHAZAR ---------- */
+/* ---------- 3. PANEL: APROBAR / RECHAZAR (CONEXIÓN REAL) ---------- */
 const filasPanel = document.getElementById('panel-filas');
 const avisoVacio = document.getElementById('panel-vacio');
-// Un solo listener para todos los botones (delegación de eventos)
-filasPanel.addEventListener('click', (e) => {
+filasPanel.addEventListener('click', async (e) => {
   const boton = e.target.closest('button[data-accion]');
   if (!boton) return;
   const fila = boton.closest('tr');
-  if (boton.dataset.accion === 'aprobar') {
-    // TEMPORAL: aquí irá un fetch() al backend para guardar la aprobación
-    fila.classList.add('fila--aprobada');
-    fila.querySelector('.panel__acciones').innerHTML = '<span class="estado">✓ Aprobado</span>';
-  } else {
-    // TEMPORAL: aquí irá un fetch() al backend para borrar la sugerencia
-    fila.classList.add('fila--saliendo');
-    setTimeout(() => {
-      fila.remove();
-      avisoVacio.hidden = filasPanel.children.length > 0;
-    }, 350); // coincide con la transición de .fila--saliendo
+  const idSugerencia = fila.dataset.id; // Obtenemos el ID único de MongoDB que inyectamos antes
+  const accion = boton.dataset.accion;
+  // Desactivamos temporalmente todos los botones de la fila por UX mientras responde el servidor
+  const botonesFila = fila.querySelectorAll('button');
+  botonesFila.forEach(b => b.disabled = true);
+  try {
+    if (accion === 'aprobar') {
+      // Petición PUT al backend para aprobar de verdad
+      const respuesta = await fetch(`http://localhost:3000/api/admin/sugerencias/${idSugerencia}/aprobar`, {
+        method: 'PUT'
+      });
+      const resultado = await respuesta.json();
+      if (resultado.ok) {
+        fila.classList.add('fila--aprobada');
+        fila.querySelector('.panel__acciones').innerHTML = '<span class="estado">✓ Aprobado</span>';
+      }
+    } else if (accion === 'rechazar') {
+      // Petición DELETE al backend para borrar de verdad de MongoDB
+      const respuesta = await fetch(`http://localhost:3000/api/admin/sugerencias/${idSugerencia}`, {
+        method: 'DELETE'
+      });
+      const resultado = await respuesta.json();
+      if (resultado.ok) {
+        fila.classList.add('fila--saliendo');
+        setTimeout(() => {
+          fila.remove();
+          if (avisoVacio) {
+            avisoVacio.hidden = filasPanel.children.length > 0;
+          }
+        }, 350);
+      }
+    }
+  } catch (error) {
+    console.error('Error al procesar la acción del panel:', error);
+    alert('No se pudo completar la acción. Revisa que el backend esté encendido.');
+    // Volvemos a activar los botones si la red falló
+    botonesFila.forEach(b => b.disabled = false);
   }
 });
 
-/* ---------- 4. FORMULARIO "SUGIERE UN RECURSO" ---------- */
+/* ---------- 4. FORMULARIO "SUGIERE UN RECURSO"  ---------- */
 const formSugerencia = document.getElementById('form-sugerencia');
 const estadoSugerencia = document.getElementById('sug-estado');
-formSugerencia.addEventListener('submit', (e) => {
-  e.preventDefault(); // evita que la página recargue
+formSugerencia.addEventListener('submit', async (e) => {
+  e.preventDefault(); // Evita que la página se recargue por defecto
   const boton = formSugerencia.querySelector('button[type="submit"]');
-  const primerNombre = document.getElementById('sug-nombre').value.trim().split(' ')[0];
-  boton.disabled = true;
-  boton.textContent = 'Enviando...';
+  const nombreInput = document.getElementById('sug-nombre');
+  const correoInput = document.getElementById('sug-correo');
+  const categoriaInput = document.getElementById('sug-categoria'); 
+  const enlaceInput = document.getElementById('sug-enlace');
+  // CORRECCIÓN: Intentamos buscar por 'sug-justificacion' o por 'sug-mensaje' en caso de que use el ID del reset CSS
+  const justificacionInput = document.getElementById('sug-justificacion') || document.getElementById('sug-mensaje');
   estadoSugerencia.textContent = '';
   estadoSugerencia.classList.remove('formulario__estado--error');
-  // TEMPORAL: aquí irá fetch('/api/sugerencias', { method: 'POST', ... }); por ahora solo se simula
-  setTimeout(() => {
-    estadoSugerencia.textContent = `¡Gracias, ${primerNombre}! Recibimos tu sugerencia.`;
-    formSugerencia.reset();
+  if (nombreInput.value.trim() === "" || enlaceInput.value.trim() === "") {
+    estadoSugerencia.textContent = 'Por favor, completa los campos requeridos.';
+    estadoSugerencia.classList.add('formulario__estado--error');
+    return;
+  }
+  const primerNombre = nombreInput.value.trim().split(' ')[0];
+  boton.disabled = true;
+  boton.textContent = 'Enviando sugerencia...';
+  // Extraemos el valor de forma segura verificando la existencia del nodo
+  const textoJustificacion = (justificacionInput && justificacionInput.value) ? justificacionInput.value.trim() : "";
+  const datosSugerencia = {
+    nombre: nombreInput.value.trim(),
+    correo: correoInput ? correoInput.value.trim() : "correo@ejemplo.com",
+    categoria: categoriaInput ? categoriaInput.value.trim() : "General",
+    enlace: enlaceInput.value.trim(),
+    justificacion: textoJustificacion // Enviamos la variable procesada
+  };
+  try {
+    const respuesta = await fetch('http://localhost:3000/api/sugerencias', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datosSugerencia)
+    });
+    const resultado = await respuesta.json();
+    if (resultado.ok) {
+      estadoSugerencia.textContent = `¡Gracias, ${primerNombre}! Tu sugerencia se guardó en la base de datos de forma permanente.`;
+      formSugerencia.reset();
+    } else {
+      estadoSugerencia.textContent = 'Hubo un problema en el servidor al guardar la sugerencia.';
+      estadoSugerencia.classList.add('formulario__estado--error');
+    }
+  } catch (error) {
+    console.error('Error en la petición fetch:', error);
+    estadoSugerencia.textContent = 'No se pudo conectar con el servidor. Verifica que el backend esté encendido.';
+    estadoSugerencia.classList.add('formulario__estado--error');
+  } finally {
     boton.disabled = false;
     boton.textContent = 'Enviar sugerencia';
-  }, 900);
+  }
 });
-
 /* ---------- 5. CHAT DEL GUARDIÁN ---------- */
-// TEMPORAL: respuesta fija. Se reemplaza por la IA personalizada.
 const formChat = document.getElementById('chat-form');
 const cajaChat = document.getElementById('chat-conversacion');
 const inputChat = document.getElementById('chat-input');
 function agregarMensaje(texto, clase) {
   const mensaje = document.createElement('div');
   mensaje.className = `chat__mensaje ${clase}`;
-  mensaje.textContent = texto; // textContent evita inyectar HTML
+  mensaje.textContent = texto; 
   cajaChat.appendChild(mensaje);
   cajaChat.scrollTop = cajaChat.scrollHeight;
 }
@@ -127,42 +223,34 @@ formChat.addEventListener('submit', (e) => {
 });
 
 /* ---------- 6. FAVORITOS (corazón en cada tarjeta) ---------- */
-// Los favoritos son un ARREGLO con los ids de las pasiones, ej: ['quimica', 'musica'].
-// Se guardan en localStorage (una "cajita" del navegador): sobreviven al cerrar la página,
-// pero solo en este navegador.
 const CLAVE_FAVORITOS = 'etheosFavoritos';
 function leerFavoritos() {
   try {
-    // localStorage solo guarda TEXTO; JSON.parse lo convierte de vuelta en arreglo
     return JSON.parse(localStorage.getItem(CLAVE_FAVORITOS)) || [];
   } catch (error) {
-    return []; // dato dañado o almacenamiento bloqueado
+    return []; 
   }
 }
 function guardarFavoritos(lista) {
   try {
-    localStorage.setItem(CLAVE_FAVORITOS, JSON.stringify(lista)); // arreglo -> texto
+    localStorage.setItem(CLAVE_FAVORITOS, JSON.stringify(lista));
   } catch (error) {
-    // si no se puede guardar, el corazón igual funciona durante esta visita
   }
 }
 let favoritos = leerFavoritos();
-// ♥ si es favorito, ♡ si no. El CSS pinta el fondo vino con aria-pressed="true"
 function pintarCorazon(boton, esFavorito) {
   boton.setAttribute('aria-pressed', String(esFavorito));
   boton.textContent = esFavorito ? '♥' : '♡';
 }
-// Para CADA tarjeta: crea su corazón y le da vida
 document.querySelectorAll('.tarjeta').forEach((tarjeta) => {
-  const id = tarjeta.id.replace('tarjeta-', ''); // 'tarjeta-quimica' -> 'quimica'
+  const id = tarjeta.id.replace('tarjeta-', '');
   const nombre = tarjeta.querySelector('.tarjeta__titulo').textContent;
   const boton = document.createElement('button');
   boton.type = 'button';
   boton.className = 'tarjeta__fav';
   boton.setAttribute('aria-label', `Marcar ${nombre} como favorita`);
-  pintarCorazon(boton, favoritos.includes(id)); // ¿ya estaba guardada?
+  pintarCorazon(boton, favoritos.includes(id));
   boton.addEventListener('click', () => {
-    // Si ya es favorita se quita (filter); si no, se agrega (push)
     favoritos = favoritos.includes(id) ? favoritos.filter((f) => f !== id) : [...favoritos, id];
     guardarFavoritos(favoritos);
     pintarCorazon(boton, favoritos.includes(id));
