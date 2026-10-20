@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Etheos: el carácter divino del conocimiento a través de tus pasiones.">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="apple-touch-icon" href="img/logo.png">
   <title>Etheos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +68,7 @@
         </div>
         <ul class="hero__datos">
           <li><strong>16</strong> pasiones</li>
-          <li><strong>+1M</strong> usuarios</li>
+          <li><strong>+Demo</strong> usuarios</li>
           <li><strong>4</strong> recursos por módulo</li>
         </ul>
       </div>
@@ -456,7 +458,7 @@
             <input type="url" id="sug-enlace" name="enlace" class="campo__input" placeholder="https://..." required>
           </div>
           <div class="campo">
-            <label class="campo__label">¿Por qué quieres recomendar este contenido?</label>
+           <label for="sug-justificacion" class="campo__label">¿Por qué quieres recomendar este contenido?</label>
 <textarea id="sug-justificacion" name="justificacion" class="campo__input campo__textarea" placeholder="Escribe tus motivos aquí..."></textarea>
           </div>
           <button type="submit" class="btn btn--vino btn--ancho">Enviar sugerencia</button>
@@ -495,6 +497,7 @@
       <header class="seccion__cabecera">
         <p class="seccion__etiqueta">Asistente</p>
         <h2 class="seccion__titulo">GUARDIÁN DE ETHEOS</h2>
+        <p class="chat__aviso">🔒 Por su privacidad, no escriba datos personales.</p> 
       </header>
       <div class="guardian__grid">
         <figure class="guardian__figura">
@@ -508,7 +511,7 @@
           </div>
           <form class="chat__form" id="chat-form">
             <label for="chat-input" class="sr-only">Escribe tu pregunta</label>
-            <input type="text" id="chat-input" class="campo__input chat__input" placeholder="Pregunta algo sobre lo que quieres aprender..." required>
+            <input type="text" id="chat-input" class="campo__input chat__input" placeholder="Pregunta algo sobre lo que quieres saber..." required>
             <button type="submit" class="btn btn--amarillo">Consultar</button>
           </form>
         </div>

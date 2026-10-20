@@ -918,6 +918,13 @@ ul {
   border-radius: var(--radio-pill);
   background-color: var(--color-blanco);
 }
+.chat__aviso {
+  margin-top: var(--espacio-sm);
+  font-size: 0.80rem;
+  line-height: 1.5;
+  color: var(--color-texto);
+  text-align: center;
+}
 
 /* ---------- 14. FOOTER ---------- */
 .footer {

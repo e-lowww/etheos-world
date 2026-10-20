@@ -3,6 +3,7 @@
    ========================================================= */
 
 'use strict';
+const API_URL = 'http://localhost:3000';
 
 /* ---------- 1. MENÚ MÓVIL ---------- */
 const botonMenu = document.getElementById('nav-toggle');
@@ -16,48 +17,39 @@ function cambiarMenu(abrir) {
 botonMenu.addEventListener('click', () => cambiarMenu(!listaMenu.classList.contains('abierto')));
 listaMenu.addEventListener('click', (e) => { if (e.target.closest('a')) cambiarMenu(false); });
 
-/* ---------- 2. LOGIN DEL ADMIN (CONEXIÓN REAL AL BACKEND) ---------- */
-const CLAVE_SESION = 'etheosAdmin'; 
+/* ---------- 2. LOGIN DEL ADMIN ---------- */
+const CLAVE_TOKEN = 'etheosToken';
 const formLogin = document.getElementById('form-login');
 const mensajeLogin = document.getElementById('login-mensaje');
 const panelAdmin = document.getElementById('panel-admin');
+const filasPanel = document.getElementById('panel-filas');
+const avisoPanel = document.getElementById('panel-vacio');
 function mostrarMensajeLogin(texto, esError) {
   mensajeLogin.textContent = texto;
   mensajeLogin.classList.toggle('modal__mensaje--error', esError);
 }
-async function cargarSugerenciasAdmin() {
-  const filasPanel = document.getElementById('panel-filas');
-  const avisoVacio = document.getElementById('panel-vacio');
-  if (!filasPanel) return;
-  try {
-    const respuesta = await fetch('http://localhost:3000/api/admin/sugerencias');
-    const resultado = await respuesta.json();
-    if (resultado.ok) {
-      filasPanel.innerHTML = ''; 
-      if (resultado.sugerencias.length === 0) {
-        if (avisoVacio) avisoVacio.hidden = false;
-        return;
-      }
-      if (avisoVacio) avisoVacio.hidden = true;
-      resultado.sugerencias.forEach((sug) => {
-        const tr = document.createElement('tr');
-        tr.dataset.id = sug._id; 
-        tr.innerHTML = `
-          <td><strong>${sug.nombre}</strong><br><small>${sug.correo}</small></td>
-          <td><span class="etiqueta">${sug.categoria}</span></td>
-          <td><a href="${sug.enlace}" target="_blank" class="panel__link">Ver recurso ↗</a></td>
-          <td>${sug.justificacion || '<i>Sin justificación</i>'}</td>
-          <td class="panel__acciones">
-            <button class="btn btn--aprobar" data-accion="aprobar">Aprobar</button>
-            <button class="btn btn--rechazar" data-accion="rechazar">Rechazar</button>
-          </td>
-        `;
-        filasPanel.appendChild(tr);
-      });
-    }
-  } catch (error) {
-    console.error('Error cargando el panel:', error);
+function cerrarSesion(mensaje) {
+  sessionStorage.removeItem(CLAVE_TOKEN);
+  panelAdmin.hidden = true;
+  filasPanel.replaceChildren();
+  if (mensaje) {
+    mostrarMensajeLogin(mensaje, true);
+    location.hash = 'login';
+  } else {
+    location.hash = 'inicio';
   }
+}
+async function peticionAdmin(ruta, opciones = {}) {
+  const token = sessionStorage.getItem(CLAVE_TOKEN);
+  const respuesta = await fetch(`${API_URL}${ruta}`, {
+    ...opciones,
+    headers: { ...(opciones.headers || {}), Authorization: `Bearer ${token}` }
+  });
+  if (respuesta.status === 401) {
+    cerrarSesion('Su sesión expiró. Inicie sesión de nuevo.');
+    throw new Error('Sesión expirada');
+  }
+  return respuesta.json();
 }
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -68,17 +60,14 @@ formLogin.addEventListener('submit', async (e) => {
   boton.textContent = 'Verificando...';
   mostrarMensajeLogin('', false);
   try {
-    // Enviamos los datos al backend en una petición POST segura
-    const respuesta = await fetch('http://localhost:3000/api/auth/login', {
+    const respuesta = await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ usuario, clave })
     });
     const resultado = await respuesta.json();
     if (respuesta.ok && resultado.ok) {
-      sessionStorage.setItem(CLAVE_SESION, '1');
+      sessionStorage.setItem(CLAVE_TOKEN, resultado.token);
       mostrarMensajeLogin(resultado.mensaje, false);
       cargarSugerenciasAdmin();
       setTimeout(() => {
@@ -93,119 +82,153 @@ formLogin.addEventListener('submit', async (e) => {
     }
   } catch (error) {
     console.error('Error conectando al login del backend:', error);
-    mostrarMensajeLogin('No se pudo conectar con el servidor de autenticación.', true);
+    mostrarMensajeLogin('No se pudo conectar con el servidor. Verifique que esté encendido.', true);
   } finally {
     boton.disabled = false;
     boton.textContent = 'Iniciar Sesión';
   }
 });
-document.getElementById('btn-salir').addEventListener('click', () => {
-  sessionStorage.removeItem(CLAVE_SESION);
-  panelAdmin.hidden = true;
-  location.hash = 'inicio';
-});
-if (sessionStorage.getItem(CLAVE_SESION) === '1') {
+document.getElementById('btn-salir').addEventListener('click', () => cerrarSesion());
+if (sessionStorage.getItem(CLAVE_TOKEN)) {
   panelAdmin.hidden = false;
   cargarSugerenciasAdmin();
 }
-
-/* ---------- 3. PANEL: APROBAR / RECHAZAR (CONEXIÓN REAL) ---------- */
-const filasPanel = document.getElementById('panel-filas');
-const avisoVacio = document.getElementById('panel-vacio');
+/* ---------- 3. PANEL: LISTAR, APROBAR Y RECHAZAR ---------- */
+function mostrarAvisoPanel(texto) {
+  avisoPanel.textContent = texto;
+  avisoPanel.hidden = false;
+}
+function crearBoton(accion, texto, claseColor) {
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = `btn ${claseColor}`;
+  boton.dataset.accion = accion;
+  boton.textContent = texto;
+  return boton;
+}
+function crearFila(sug) {
+  const tr = document.createElement('tr');
+  tr.dataset.id = sug._id;
+  const tdNombre = document.createElement('td');
+  const nombre = document.createElement('strong');
+  nombre.textContent = sug.nombre;
+  const correo = document.createElement('small');
+  correo.textContent = sug.correo;
+  tdNombre.append(nombre, document.createElement('br'), correo);
+  const tdCategoria = document.createElement('td');
+  const etiqueta = document.createElement('span');
+  etiqueta.className = 'etiqueta';
+  etiqueta.textContent = sug.categoria;
+  tdCategoria.append(etiqueta);
+  const tdEnlace = document.createElement('td');
+  if (/^https?:\/\//i.test(sug.enlace)) { 
+    const enlace = document.createElement('a');
+    enlace.className = 'panel__link';
+    enlace.href = sug.enlace;
+    enlace.target = '_blank';
+    enlace.rel = 'noopener noreferrer';
+    enlace.textContent = 'Ver recurso ↗';
+    tdEnlace.append(enlace);
+  } else {
+    tdEnlace.textContent = 'Enlace no válido';
+  }
+  const tdMotivo = document.createElement('td');
+  tdMotivo.textContent = sug.justificacion || 'Sin justificación';
+  const tdAcciones = document.createElement('td');
+  const acciones = document.createElement('div');
+  acciones.className = 'panel__acciones';
+  acciones.append(crearBoton('aprobar', 'Aprobar', 'btn--aprobar'), crearBoton('rechazar', 'Rechazar', 'btn--rechazar'));
+  tdAcciones.append(acciones);
+  tr.append(tdNombre, tdCategoria, tdEnlace, tdMotivo, tdAcciones);
+  return tr;
+}
+async function cargarSugerenciasAdmin() {
+  mostrarAvisoPanel('Cargando sugerencias...');
+  try {
+    const resultado = await peticionAdmin('/api/admin/sugerencias');
+    if (!resultado.ok) {
+      mostrarAvisoPanel('No se pudieron cargar las sugerencias.');
+      return;
+    }
+    filasPanel.replaceChildren(...resultado.sugerencias.map(crearFila));
+    if (resultado.sugerencias.length === 0) mostrarAvisoPanel('No hay sugerencias por revisar.');
+    else avisoPanel.hidden = true;
+  } catch (error) {
+    if (error.message !== 'Sesión expirada') {
+      console.error('Error cargando el panel:', error);
+      mostrarAvisoPanel('No se pudo conectar con el servidor. Verifique que esté encendido.');
+    }
+  }
+}
 filasPanel.addEventListener('click', async (e) => {
   const boton = e.target.closest('button[data-accion]');
   if (!boton) return;
   const fila = boton.closest('tr');
-  const idSugerencia = fila.dataset.id; // Obtenemos el ID único de MongoDB que inyectamos antes
-  const accion = boton.dataset.accion;
-  // Desactivamos temporalmente todos los botones de la fila por UX mientras responde el servidor
+  const id = fila.dataset.id;
   const botonesFila = fila.querySelectorAll('button');
-  botonesFila.forEach(b => b.disabled = true);
+  botonesFila.forEach((b) => { b.disabled = true; });
   try {
-    if (accion === 'aprobar') {
-      // Petición PUT al backend para aprobar de verdad
-      const respuesta = await fetch(`http://localhost:3000/api/admin/sugerencias/${idSugerencia}/aprobar`, {
-        method: 'PUT'
-      });
-      const resultado = await respuesta.json();
-      if (resultado.ok) {
-        fila.classList.add('fila--aprobada');
-        fila.querySelector('.panel__acciones').innerHTML = '<span class="estado">✓ Aprobado</span>';
-      }
-    } else if (accion === 'rechazar') {
-      // Petición DELETE al backend para borrar de verdad de MongoDB
-      const respuesta = await fetch(`http://localhost:3000/api/admin/sugerencias/${idSugerencia}`, {
-        method: 'DELETE'
-      });
-      const resultado = await respuesta.json();
-      if (resultado.ok) {
-        fila.classList.add('fila--saliendo');
-        setTimeout(() => {
-          fila.remove();
-          if (avisoVacio) {
-            avisoVacio.hidden = filasPanel.children.length > 0;
-          }
-        }, 350);
-      }
+    const esAprobar = boton.dataset.accion === 'aprobar';
+    const resultado = await peticionAdmin(
+      esAprobar ? `/api/admin/sugerencias/${id}/aprobar` : `/api/admin/sugerencias/${id}`,
+      { method: esAprobar ? 'PUT' : 'DELETE' }
+    );
+    if (!resultado.ok) throw new Error(resultado.mensaje || 'El servidor no pudo completar la acción');
+    if (esAprobar) {
+      fila.classList.add('fila--aprobada');
+      const estado = document.createElement('span');
+      estado.className = 'estado';
+      estado.textContent = '✓ Aprobado';
+      fila.querySelector('.panel__acciones').replaceChildren(estado);
+    } else {
+      fila.classList.add('fila--saliendo');
+      setTimeout(() => {
+        fila.remove();
+        if (filasPanel.children.length === 0) mostrarAvisoPanel('No hay sugerencias por revisar.');
+      }, 350); 
     }
   } catch (error) {
+    if (error.message === 'Sesión expirada') return;
     console.error('Error al procesar la acción del panel:', error);
-    alert('No se pudo completar la acción. Revisa que el backend esté encendido.');
-    // Volvemos a activar los botones si la red falló
-    botonesFila.forEach(b => b.disabled = false);
+    alert('No se pudo completar la acción. Verifique que el backend esté encendido.');
+    botonesFila.forEach((b) => { b.disabled = false; }); 
   }
 });
-
 /* ---------- 4. FORMULARIO "SUGIERE UN RECURSO" ---------- */
 const formSugerencia = document.getElementById('form-sugerencia');
 const estadoSugerencia = document.getElementById('sug-estado');
 formSugerencia.addEventListener('submit', async (e) => {
-  e.preventDefault(); // Evita que la página se recargue
+  e.preventDefault();
   const boton = formSugerencia.querySelector('button[type="submit"]');
+  const datos = new FormData(formSugerencia);
+  const sugerencia = {
+    nombre: (datos.get('nombre') || '').trim(),
+    correo: (datos.get('correo') || '').trim(),
+    categoria: (datos.get('categoria') || '').trim(),
+    enlace: (datos.get('enlace') || '').trim(),
+    justificacion: (datos.get('justificacion') || '').trim()
+  };
   estadoSugerencia.textContent = '';
   estadoSugerencia.classList.remove('formulario__estado--error');
-  const formData = new FormData(formSugerencia);
-  const nombre = formData.get('nombre') ? formData.get('nombre').trim() : '';
-  const correo = formData.get('correo') ? formData.get('correo').trim() : 'correo@ejemplo.com';
-  const categoria = formData.get('categoria') ? formData.get('categoria').trim() : 'General';
-  const enlace = formData.get('enlace') ? formData.get('enlace').trim() : '';
-  // Captura el campo sin importar si en tu HTML se llama "justificacion", "mensaje" o "justificacionInput"
-  const justificacion = (formData.get('justificacion') || formData.get('mensaje') || '').trim();
-  // Validación rápida en el cliente
-  if (nombre === "" || enlace === "") {
-    estadoSugerencia.textContent = 'Por favor, completa los campos requeridos.';
-    estadoSugerencia.classList.add('formulario__estado--error');
-    return;
-  }
-  const primerNombre = nombre.split(' ')[0];
   boton.disabled = true;
   boton.textContent = 'Enviando sugerencia...';
-  const datosSugerencia = {
-    nombre,
-    correo,
-    categoria,
-    enlace,
-    justificacion // Aquí ya va el texto garantizado de la cajita
-  };
   try {
-    const respuesta = await fetch('http://localhost:3000/api/sugerencias', {
+    const respuesta = await fetch(`${API_URL}/api/sugerencias`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(datosSugerencia)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sugerencia)
     });
     const resultado = await respuesta.json();
-    if (resultado.ok) {
-      estadoSugerencia.textContent = `¡Gracias, ${primerNombre}! Tu sugerencia se guardó en la base de datos de forma permanente.`;
+    if (respuesta.ok && resultado.ok) {
+      estadoSugerencia.textContent = `¡Gracias, ${sugerencia.nombre.split(' ')[0]}! Tu sugerencia fue recibida y será revisada.`;
       formSugerencia.reset();
     } else {
-      estadoSugerencia.textContent = 'Hubo un problema en el servidor al guardar la sugerencia.';
+      estadoSugerencia.textContent = resultado.mensaje || 'Hubo un problema al guardar la sugerencia.';
       estadoSugerencia.classList.add('formulario__estado--error');
     }
   } catch (error) {
     console.error('Error en la petición fetch:', error);
-    estadoSugerencia.textContent = 'No se pudo conectar con el servidor. Verifica que el backend esté encendido.';
+    estadoSugerencia.textContent = 'No se pudo conectar con el servidor. Inténtalo de nuevo en unos momentos.';
     estadoSugerencia.classList.add('formulario__estado--error');
   } finally {
     boton.disabled = false;
@@ -213,72 +236,58 @@ formSugerencia.addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------- 5. CHAT DEL GUARDIÁN (CONEXIÓN REAL A LA IA) ---------- */
+/* ---------- 5. CHAT DEL GUARDIÁN ---------- */
 const formChat = document.getElementById('chat-form');
 const cajaChat = document.getElementById('chat-conversacion');
 const inputChat = document.getElementById('chat-input');
-
 function agregarMensaje(texto, clase) {
   const mensaje = document.createElement('div');
   mensaje.className = `chat__mensaje ${clase}`;
-  mensaje.textContent = texto; 
+  mensaje.textContent = texto;
   cajaChat.appendChild(mensaje);
   cajaChat.scrollTop = cajaChat.scrollHeight;
+  return mensaje;
 }
 formChat.addEventListener('submit', async (e) => {
   e.preventDefault();
   const textoUsuario = inputChat.value.trim();
-  if (textoUsuario === "") return;
-  // 1. Pintamos de inmediato el mensaje del usuario en la pantalla
+  if (textoUsuario === '') return;
   agregarMensaje(textoUsuario, 'chat__mensaje--usuario');
   inputChat.value = '';
-  // 2. Creamos un mensaje temporal de carga por UX (Estado de carga)
-  const mensajeCarga = document.createElement('div');
-  mensajeCarga.className = 'chat__mensaje chat__mensaje--ia';
-  mensajeCarga.innerHTML = '<i>El Guardián está reflexionando en silencio...</i>';
-  cajaChat.appendChild(mensajeCarga);
-  cajaChat.scrollTop = cajaChat.scrollHeight;
-  // Desactivamos el input y el botón mientras la IA responde
+  const mensajeCarga = agregarMensaje('El Guardián está reflexionando en silencio...', 'chat__mensaje--ia');
   const botonChat = formChat.querySelector('button[type="submit"]');
-  if (botonChat) botonChat.disabled = true;
+  botonChat.disabled = true;
   inputChat.disabled = true;
   try {
-    // 3. Enviamos la pregunta en una petición POST segura a nuestro Backend
-    const respuesta = await fetch('http://localhost:3000/api/guardian/chat', {
+    const respuesta = await fetch(`${API_URL}/api/guardian/chat`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mensaje: textoUsuario })
     });
     const resultado = await respuesta.json();
-    // Removemos el letrero temporal de carga
     mensajeCarga.remove();
-    if (respuesta.ok && resultado.ok) {
-      // 4. Pintamos la respuesta inteligente y formal que procesó el Backend
-      agregarMensaje(resultado.respuesta, 'chat__mensaje--ia');
-    } else {
-      agregarMensaje('Disculpe la interrupción en nuestro canal de comunicación. ¿Podría plantearme su inquietud nuevamente?', 'chat__mensaje--ia');
-    }
+    agregarMensaje(
+      resultado.respuesta || 'Disculpe la interrupción en nuestro canal de comunicación. ¿Podría plantearme su inquietud nuevamente?',
+      'chat__mensaje--ia'
+    );
   } catch (error) {
     console.error('Error en la conexión del chat con el backend:', error);
     mensajeCarga.remove();
-    agregarMensaje('En este momento no logro conectar con el templo del conocimiento. Por favor, asegúrese de que el servidor backend esté encendido.', 'chat__mensaje--ia');
+    agregarMensaje('En este momento no logro conectar con el templo del conocimiento. Por favor, inténtelo de nuevo en unos instantes.', 'chat__mensaje--ia');
   } finally {
-    // Reactivamos los controles del chat para la siguiente pregunta
-    if (botonChat) botonChat.disabled = false;
+    botonChat.disabled = false;
     inputChat.disabled = false;
     inputChat.focus();
   }
 });
 
-/* ---------- 6. FAVORITOS (corazón en cada tarjeta) ---------- */
+/* ---------- 6. FAVORITOS ---------- */
 const CLAVE_FAVORITOS = 'etheosFavoritos';
 function leerFavoritos() {
   try {
     return JSON.parse(localStorage.getItem(CLAVE_FAVORITOS)) || [];
   } catch (error) {
-    return []; 
+    return [];
   }
 }
 function guardarFavoritos(lista) {
