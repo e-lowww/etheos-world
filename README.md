@@ -9,8 +9,7 @@ Enlaces
 Dirección:
 Página (frontend, GitHub Pages) https://e-lowww.github.io/etheos-world/
 
-API (backend, Render)	https://TU-SERVICIO.onrender.com
-
+API (backend, Render)	https://etheos-world-1.onrender.com
 Qué incluye
 Home con identidad de marca, textos de presentación y llamadas a la acción.
 Catálogo de 16 pasiones. Cada tarjeta abre un módulo interno con su descripción y 4 recursos.
