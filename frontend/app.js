@@ -3,7 +3,8 @@
    ========================================================= */
 
 'use strict';
-const API_URL = 'http://localhost:3000';
+const EN_LOCAL = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+const API_URL = EN_LOCAL ? 'http://localhost:3000' : 'https://etheos-world-1.onrender.com';
 
 /* ---------- 1. MENÚ MÓVIL ---------- */
 const botonMenu = document.getElementById('nav-toggle');
