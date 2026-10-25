@@ -1077,3 +1077,8 @@ ul {
     scroll-behavior: auto !important;
   }
 }
+.numero-animado {
+  display: inline-block;
+  transition: all 0.1s ease-in-out;
+  /* Mantiene el color y tamaño que ya tenías en tus strong */
+}
