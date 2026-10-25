@@ -360,7 +360,7 @@ window.addEventListener('DOMContentLoaded', () => {
   numeroActual += Math.floor (Math.random( )*15) + 5;
    
     contador.textContent = `+${numeroActual}`;
-    if (numeroActual >= 900) {
+    if (numeroActual >=100) {
       clearInterval(animacion);
       contador.textcontent = "∞";
     }
