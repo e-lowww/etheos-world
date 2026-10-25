@@ -356,7 +356,7 @@ botonLimpiar.addEventListener('click', () => { inputBuscador.value = ''; buscar(
 window.addEventListener('DOMContentLoaded', () => {
   const contador = document.getElementById('contador-usuarios');
   let numeroActual = 0;
-  const numeroMaximo = 150; 
+  const numeroMaximo = ∞; 
   
   const animacion = setInterval(() => {
     numeroActual++;
