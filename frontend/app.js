@@ -353,3 +353,16 @@ function buscar() {
 }
 inputBuscador.addEventListener('input', buscar);
 botonLimpiar.addEventListener('click', () => { inputBuscador.value = ''; buscar(); inputBuscador.focus(); });
+window.addEventListener('DOMContentLoaded', () => {
+  const contador = document.getElementById('contador-usuarios');
+  let numeroActual = 0;
+  const numeroMaximo = 150; 
+  
+  const animacion = setInterval(() => {
+    numeroActual++;
+    contador.textContent = `+${numeroActual}`;
+    if (numeroActual >= numeroMaximo) {
+      clearInterval(animacion);
+    }
+  }, 15);
+});
