@@ -356,13 +356,13 @@ botonLimpiar.addEventListener('click', () => { inputBuscador.value = ''; buscar(
 window.addEventListener('DOMContentLoaded', () => {
   const contador = document.getElementById('contador-usuarios');
   let numeroActual = 0;
-  const numeroMaximo = ∞; 
-  
   const animacion = setInterval(() => {
-    numeroActual++;
+  numeroActual += Math.floor (Math.random( )*15) + 5;
+   
     contador.textContent = `+${numeroActual}`;
-    if (numeroActual >= numeroMaximo) {
+    if (numeroActual >= 900) {
       clearInterval(animacion);
+      contador.textcontent = "∞";
     }
-  }, 15);
+  }, 10);
 });
