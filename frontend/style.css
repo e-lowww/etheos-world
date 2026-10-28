@@ -425,7 +425,7 @@ ul {
 .hero {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 1.6fr 1fr; /* más espacio para la imagen */
+  grid-template-columns: 1.6fr 1fr; 
   align-items: center;
   gap: var(--espacio-lg);
   padding: calc(var(--altura-header) + var(--espacio-md)) var(--espacio-lg) var(--espacio-lg);
@@ -447,8 +447,7 @@ ul {
   width: 100%;
   height: auto;
   object-fit: contain;
-  mix-blend-mode: multiply; /* el blanco del JPG desaparece */
-  /* Difuminado de bordes: opaca en el centro, transparente hacia afuera */
+  mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(ellipse at center, #000 45%, transparent 120%);
   mask-image: radial-gradient(ellipse at center, #000 45%, transparent 120%);
   animation: flotar 6s ease-in-out infinite;
@@ -982,7 +981,6 @@ ul {
   .header {
     padding: 0 var(--espacio-md);
   }
-  /* Menú hamburguesa: la lista se vuelve un desplegable bajo el header */
   .nav__toggle {
     display: inline-flex;
   }
@@ -1080,5 +1078,4 @@ ul {
 .numero-animado {
   display: inline-block;
   transition: all 0.1s ease-in-out;
-  /* Mantiene el color y tamaño que ya tenías en tus strong */
 }
