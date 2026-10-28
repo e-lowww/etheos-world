@@ -339,7 +339,6 @@ function buscar() {
   const palabras = normalizar(inputBuscador.value).split(' ').filter(Boolean);
   let visibles = 0;
   indice.forEach(({ tarjeta, aviso, nombres, propio, recursos }) => {
-    // La tarjeta se queda si CADA palabra aparece en su nombre/categoría o en algún recurso
     const coincide = palabras.every((p) => propio.includes(p) || recursos.some((r) => r.includes(p)));
     const porNombre = palabras.every((p) => propio.includes(p));
     const hallados = nombres.filter((_, i) => palabras.some((p) => recursos[i].includes(p)));
